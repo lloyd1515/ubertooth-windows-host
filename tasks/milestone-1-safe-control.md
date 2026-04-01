@@ -1,13 +1,13 @@
 # Milestone 1 — Safe Device Control MVP
 
 ## Goals
-- [ ] Implement `detect`
-- [ ] Implement `info`
-- [ ] Implement `version`
-- [ ] Implement safe `reset`
-- [ ] Add structured diagnostics
-- [ ] Publish reproducible Windows build instructions
+- [x] Implement `detect`
+- [x] Implement `info`
+- [x] Implement `version`
+- [ ] Implement safe `reset` *(blocked: would cross the current no-write/no-mode-change safety boundary)*
+- [x] Add structured diagnostics
+- [x] Publish reproducible Windows build instructions
 
 ## Exit criteria
-- [ ] Fresh user can install and run safe commands on a supported machine
-- [ ] Known limitations documented
+- [x] Fresh user can install and run safe commands on a supported machine
+- [x] Known limitations documented

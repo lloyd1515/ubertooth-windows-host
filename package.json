@@ -31,6 +31,7 @@
     "help": "node packages/cli/src/index.js help",
     "detect": "node packages/cli/src/index.js detect",
     "info": "node packages/cli/src/index.js info --json",
+    "version": "node packages/cli/src/index.js version",
     "probe": "node packages/cli/src/index.js probe --json",
     "transport-check": "node packages/cli/src/index.js transport --json",
     "protocol-info": "node packages/cli/src/index.js protocol --json",

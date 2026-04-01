@@ -9,15 +9,17 @@
 - [x] Milestone 0: official-source protocol research
 - [x] Milestone 0: protocol-aware read-only info path
 - [x] Milestone 0: getter-only runtime info path
+- [x] Milestone 1: read-only CLI polish
+- [x] Milestone 1: diagnostics taxonomy
+- [x] Milestone 1: install docs
+- [x] Milestone 1: dedicated version command
 
 ## Next
-- [ ] Decide whether to keep all runtime getters in default UX or split advanced output
-- [ ] Milestone 1: read-only CLI polish
-- [ ] Milestone 1: diagnostics taxonomy
-- [ ] Milestone 1: install docs
+- [ ] Decide whether `reset` should remain postponed until the safety boundary intentionally expands
+- [ ] Decide whether all runtime getters belong in default UX or should be split into advanced output
+- [ ] Milestone 2: official flashing support
 
 ## Later
-- [ ] Milestone 2: official flashing support
 - [ ] Milestone 3: capture/export MVP
 - [ ] Milestone 4: public hardening
 - [ ] Phase 2 parity work

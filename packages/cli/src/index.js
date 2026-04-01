@@ -5,11 +5,11 @@ import { getReadOnlyProtocolInfo } from '../../core-usb/src/readOnlyProtocolInfo
 import { getReadOnlyRuntimeInfo } from '../../core-usb/src/readOnlyRuntimeInfo.js';
 import { runReadOnlyWinUsbExperiment } from '../../core-usb/src/winUsbReadOnlyExperiment.js';
 import { classifyError, CliError, ERROR_CODES, renderCliError } from './errors.js';
-import { renderDetectResult, renderInfoResult, renderProbeResult, renderProtocolInfoResult, renderRuntimeInfoResult, renderStatusResult, renderTransportResult } from './render.js';
+import { renderDetectResult, renderInfoResult, renderProbeResult, renderProtocolInfoResult, renderRuntimeInfoResult, renderStatusResult, renderTransportResult, renderVersionResult } from './render.js';
 import { renderHelp } from './help.js';
 import { mergeStatusEntries } from './status.js';
 
-const VALID_COMMANDS = new Set(['help', 'detect', 'info', 'probe', 'transport', 'protocol', 'runtime', 'status']);
+const VALID_COMMANDS = new Set(['help', 'detect', 'info', 'version', 'probe', 'transport', 'protocol', 'runtime', 'status']);
 
 function parseArgs(argv) {
   const [command = 'help', ...rest] = argv;
@@ -59,6 +59,13 @@ async function main(argv = process.argv.slice(2)) {
     const entries = await getReadOnlyProtocolInfo();
     ensureDevices(entries, 'protocol');
     console.log(args.json ? JSON.stringify({ count: entries.length, devices: entries }, null, 2) : renderProtocolInfoResult(entries));
+    return;
+  }
+
+  if (args.command === 'version') {
+    const entries = await getReadOnlyProtocolInfo();
+    ensureDevices(entries, 'version');
+    console.log(args.json ? JSON.stringify({ count: entries.length, devices: entries }, null, 2) : renderVersionResult(entries));
     return;
   }
 

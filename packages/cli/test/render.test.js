@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { renderDetectResult, renderInfoResult, renderProbeResult, renderProtocolInfoResult, renderRuntimeInfoResult, renderStatusResult, renderTransportResult } from '../src/render.js';
+import { renderDetectResult, renderInfoResult, renderProbeResult, renderProtocolInfoResult, renderRuntimeInfoResult, renderStatusResult, renderTransportResult, renderVersionResult } from '../src/render.js';
 
 test('renderDetectResult handles no devices', () => {
   assert.equal(renderDetectResult([]), 'No Ubertooth devices found on this Windows host.');
@@ -26,6 +26,25 @@ test('renderInfoResult returns pretty JSON', () => {
   const output = renderInfoResult([{ name: 'Ubertooth One' }]);
   assert.match(output, /"count": 1/);
   assert.match(output, /"name": "Ubertooth One"/);
+});
+
+test('renderVersionResult summarizes concise firmware/build info', () => {
+  const output = renderVersionResult([
+    {
+      name: 'Ubertooth One',
+      protocolInfo: {
+        parsed: {
+          firmwareRevision: '2020-12-R1',
+          apiVersion: { formatted: '1.07' },
+          compileInfo: 'ubertooth 2020-12-R1',
+          boardId: { name: 'Ubertooth One' }
+        }
+      }
+    }
+  ]);
+
+  assert.match(output, /Firmware revision: 2020-12-R1/);
+  assert.match(output, /API version: 1.07/);
 });
 
 test('renderProbeResult shows transport readiness', () => {

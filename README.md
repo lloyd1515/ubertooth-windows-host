@@ -28,6 +28,7 @@ npm run status
 ## Command guide
 - `npm run help` — show command help
 - `npm run status` — human-friendly safe summary
+- `npm run version` — concise firmware/API/build summary
 - `npm run detect` — minimal detection output
 - `npm run probe` — driver and readiness metadata
 - `npm run transport-check` — WinUSB open + descriptor validation
@@ -37,6 +38,9 @@ npm run status
 
 ## Diagnostics
 Errors are categorized with stable codes to make GitHub issues less chaotic. See `docs/diagnostics.md`.
+
+## Install / build
+See `docs/install.md` for the reproducible Windows setup and `npm link` workflow.
 
 ## Release posture
 This is a **credible proofed baseline**, not a full Windows replacement for the Linux toolchain. Releases should clearly state that flashing and write paths are still out of scope. See `docs/release-process.md` and `CHANGELOG.md`.
@@ -55,6 +59,7 @@ The project has proven that Windows can safely:
 
 See also:
 - `docs/quickstart.md`
+- `docs/install.md`
 - `docs/diagnostics.md`
 - `docs/release-process.md`
 - `docs/repo-hardening.md`

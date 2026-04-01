@@ -30,6 +30,24 @@ export function renderInfoResult(devices) {
   }, null, 2);
 }
 
+export function renderVersionResult(entries) {
+  if (entries.length === 0) {
+    return renderMissingDeviceMessage();
+  }
+
+  const lines = ['Ubertooth version summary:'];
+  for (const [index, entry] of entries.entries()) {
+    const info = entry.protocolInfo?.parsed;
+    lines.push(`${index + 1}. ${entry.name}`);
+    lines.push(`   Firmware revision: ${info?.firmwareRevision ?? 'Unknown'}`);
+    lines.push(`   API version: ${info?.apiVersion?.formatted ?? 'Unknown'}`);
+    lines.push(`   Compile info: ${info?.compileInfo ?? 'Unknown'}`);
+    lines.push(`   Board: ${info?.boardId?.name ?? 'Unknown'}`);
+  }
+
+  return lines.join('\n');
+}
+
 export function renderProbeResult(probes) {
   if (probes.length === 0) {
     return renderMissingDeviceMessage();
@@ -136,7 +154,7 @@ export function renderStatusResult(entries) {
     lines.push(`   Board: ${protocol?.boardId?.name ?? 'Unknown'} | Serial: ${protocol?.serial ?? 'Unknown'}`);
     lines.push(`   Radio: ${runtime?.radio?.channelMhz ?? 'Unknown'} MHz, ${runtime?.radio?.modulation?.name ?? 'Unknown'}, PA=${runtime?.radio?.paEnabled ? 'on' : 'off'}, HGM=${runtime?.radio?.highGainMode ? 'on' : 'off'}, PA level=${runtime?.radio?.paLevel ?? 'Unknown'}`);
     lines.push(`   LEDs: usr=${runtime?.leds?.usr ? 'on' : 'off'}, rx=${runtime?.leds?.rx ? 'on' : 'off'}, tx=${runtime?.leds?.tx ? 'on' : 'off'} | 1.8V=${runtime?.rails?.cc1v8Enabled ? 'on' : 'off'}`);
-    lines.push(`   Safety boundary: read-only only; no DFU, no flashing, no control-out writes.`);
+    lines.push('   Safety boundary: read-only only; no DFU, no flashing, no control-out writes.');
   }
 
   return lines.join('\n');

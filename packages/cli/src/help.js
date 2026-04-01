@@ -6,6 +6,7 @@ export function renderHelp() {
     '  help            Show this help text',
     '  detect          Detect Ubertooth devices on this Windows host',
     '  info            Print raw discovery info as JSON',
+    '  version         Print a concise firmware/API/build summary',
     '  probe           Print driver/class/readiness metadata',
     '  transport       Prove safe read-only WinUSB open + USB descriptor reads',
     '  protocol        Read official version/info protocol fields',
@@ -23,7 +24,7 @@ export function renderHelp() {
     '',
     'Examples:',
     '  npm run status',
-    '  npm run protocol-info',
+    '  npm run version',
     '  node packages/cli/src/index.js runtime --json'
   ].join('\n');
 }
