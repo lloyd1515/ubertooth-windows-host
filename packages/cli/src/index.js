@@ -3,19 +3,25 @@ import { discoverUbertoothDevices } from '../../core-usb/src/windowsPnpDiscovery
 import { probeUbertoothDevices } from '../../core-usb/src/windowsPnpProbe.js';
 import { getReadOnlyProtocolInfo } from '../../core-usb/src/readOnlyProtocolInfo.js';
 import { getReadOnlyRuntimeInfo } from '../../core-usb/src/readOnlyRuntimeInfo.js';
+import { performGuardedReset } from '../../core-usb/src/resetDevice.js';
 import { runReadOnlyWinUsbExperiment } from '../../core-usb/src/winUsbReadOnlyExperiment.js';
 import { classifyError, CliError, ERROR_CODES, renderCliError } from './errors.js';
-import { renderDetectResult, renderInfoResult, renderProbeResult, renderProtocolInfoResult, renderRuntimeInfoResult, renderStatusResult, renderTransportResult, renderVersionResult } from './render.js';
+import { renderDetectResult, renderInfoResult, renderProbeResult, renderProtocolInfoResult, renderRuntimeInfoResult, renderResetResult, renderStatusResult, renderTransportResult, renderVersionResult } from './render.js';
 import { renderHelp } from './help.js';
 import { mergeStatusEntries } from './status.js';
 
-const VALID_COMMANDS = new Set(['help', 'detect', 'info', 'version', 'probe', 'transport', 'protocol', 'runtime', 'status']);
+const VALID_COMMANDS = new Set(['help', 'detect', 'info', 'version', 'reset', 'probe', 'transport', 'protocol', 'runtime', 'status']);
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 function parseArgs(argv) {
   const [command = 'help', ...rest] = argv;
   return {
     command,
-    json: rest.includes('--json')
+    json: rest.includes('--json'),
+    yes: rest.includes('--yes')
   };
 }
 
@@ -25,6 +31,42 @@ function ensureDevices(entries, commandName) {
       hint: 'Attach the device, confirm WinUSB binding, and try npm run detect first.'
     });
   }
+}
+
+async function waitForFullRecovery(targetPnpDeviceId, timeoutMs = 10000, pollIntervalMs = 1000) {
+  const startedAt = Date.now();
+  let pollCount = 0;
+
+  while ((Date.now() - startedAt) < timeoutMs) {
+    await sleep(pollIntervalMs);
+    pollCount += 1;
+    try {
+      const protocolEntries = await getReadOnlyProtocolInfo();
+      const runtimeEntries = await getReadOnlyRuntimeInfo();
+      const protocolEntry = protocolEntries.find((entry) => entry.pnpDeviceId === targetPnpDeviceId) ?? (protocolEntries.length === 1 ? protocolEntries[0] : null);
+      const runtimeEntry = runtimeEntries.find((entry) => entry.pnpDeviceId === targetPnpDeviceId) ?? (runtimeEntries.length === 1 ? runtimeEntries[0] : null);
+      const runtimeHealthy = runtimeEntry?.runtimeInfo?.rawRequests?.every((entry) => entry.success && entry.lengthTransferred > 0);
+      if (protocolEntry?.protocolInfo?.parsed?.firmwareRevision && runtimeHealthy) {
+        return {
+          successful: true,
+          elapsedMs: Date.now() - startedAt,
+          pollCount,
+          protocolEntry,
+          runtimeEntry
+        };
+      }
+    } catch {
+      // expected briefly while the interface settles after reboot
+    }
+  }
+
+  return {
+    successful: false,
+    elapsedMs: Date.now() - startedAt,
+    pollCount,
+    protocolEntry: null,
+    runtimeEntry: null
+  };
 }
 
 async function main(argv = process.argv.slice(2)) {
@@ -66,6 +108,34 @@ async function main(argv = process.argv.slice(2)) {
     const entries = await getReadOnlyProtocolInfo();
     ensureDevices(entries, 'version');
     console.log(args.json ? JSON.stringify({ count: entries.length, devices: entries }, null, 2) : renderVersionResult(entries));
+    return;
+  }
+
+  if (args.command === 'reset') {
+    if (!args.yes) {
+      throw new CliError(ERROR_CODES.RESET_CONFIRM_REQUIRED, 'Reset is state-changing. Re-run with --yes to confirm the guarded reboot request.', {
+        hint: 'Example: npm run reset -- --yes'
+      });
+    }
+
+    const result = await performGuardedReset();
+    if (!result.successful) {
+      throw new CliError(ERROR_CODES.RESET_RECONNECT_TIMEOUT, `Reset was requested for '${result.preReset?.name ?? 'the device'}', but it did not reappear within ${result.elapsedMs} ms.`, {
+        hint: 'The reboot request may still have been sent. Re-run npm run detect and npm run probe before assuming the device is gone.',
+        details: result
+      });
+    }
+
+    const recovery = await waitForFullRecovery(result.preReset?.pnpDeviceId);
+    result.protocolRecovery = recovery;
+    if (!recovery.successful) {
+      throw new CliError(ERROR_CODES.RESET_RECONNECT_TIMEOUT, `The device reappeared after reset, but full status recovery did not settle within ${recovery.elapsedMs} ms.`, {
+        hint: 'Wait a few seconds and re-run npm run status. The device may still be finishing WinUSB re-enumeration.',
+        details: result
+      });
+    }
+
+    console.log(args.json ? JSON.stringify(result, null, 2) : renderResetResult([result]));
     return;
   }
 

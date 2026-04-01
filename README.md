@@ -3,20 +3,21 @@
 Windows-first host tooling scaffold for Ubertooth, aimed at safe public use and phased progress toward Linux feature parity.
 
 ## What this repo can do today
-This repo currently supports a **safe read-only Windows baseline** for Ubertooth One:
+This repo currently supports a **safe Windows baseline** for Ubertooth One:
 - detect the device on Windows
 - inspect driver/binding/readiness metadata
 - prove read-only WinUSB transport access
 - read official firmware/version/build/board/serial/part information
 - read official getter-only runtime state (LEDs, channel, modulation, PA flags, squelch, clock)
+- perform a **guarded reboot-only reset** with reconnect-based success handling
 
 ## Safety boundary
 Current commands are intentionally limited to:
-- **control-IN only** reads
-- no control-out writes
+- **control-IN** reads for getter/info commands
+- one explicit guarded `reset` command
 - no DFU
 - no flashing
-- no runtime mode changes
+- no write-path chaining with reset
 
 ## Quickstart
 ```powershell
@@ -29,6 +30,7 @@ npm run status
 - `npm run help` — show command help
 - `npm run status` — human-friendly safe summary
 - `npm run version` — concise firmware/API/build summary
+- `npm run reset -- --yes` — guarded reboot request with reconnect verification
 - `npm run detect` — minimal detection output
 - `npm run probe` — driver and readiness metadata
 - `npm run transport-check` — WinUSB open + descriptor validation
@@ -51,17 +53,19 @@ The project has proven that Windows can safely:
 - bind via WinUSB
 - open the device read-only
 - speak official getter-only protocol requests
+- send a guarded reboot request and verify that the device comes back
 
 ## Next recommended work
-1. polish install/docs/release UX
+1. keep reset explicit and guarded
 2. keep diagnostics sharp and actionable
-3. only add new commands after official-source review confirms they are still read-only and low-risk
+3. only add new commands after official-source review confirms they are safe enough for the repo boundary
 
 See also:
 - `docs/quickstart.md`
 - `docs/install.md`
 - `docs/diagnostics.md`
 - `docs/release-process.md`
+- `docs/reset-safety-review.md`
 - `docs/repo-hardening.md`
 - `docs/github-launch-checklist.md`
 - `docs/milestone-0-implementation.md`

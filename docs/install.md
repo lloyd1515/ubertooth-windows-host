@@ -1,7 +1,7 @@
 # Install and Build Instructions
 
 ## Supported baseline
-Current instructions target the **read-only Windows baseline** only.
+Current instructions target the safe Windows baseline only.
 
 ## Requirements
 - Windows host
@@ -36,10 +36,22 @@ npm run protocol-info
 npm run runtime-info
 ```
 
+## Guarded reset usage
+Reset is no longer blocked, but it is still intentionally guarded because it reboots the device.
+
+```powershell
+npm run reset -- --yes
+```
+
+Expected behavior:
+- the device may disconnect briefly
+- the control transfer may look interrupted
+- the CLI waits for the device to reappear and for protocol access to settle again
+
 ## What is intentionally not supported yet
 - flashing
 - DFU
-- write/control-out paths
+- write/control-out paths other than guarded reset
 - capture/sniffing
 
 ## Troubleshooting

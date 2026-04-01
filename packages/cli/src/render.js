@@ -48,6 +48,33 @@ export function renderVersionResult(entries) {
   return lines.join('\n');
 }
 
+export function renderResetResult(results) {
+  if (results.length === 0) {
+    return renderMissingDeviceMessage();
+  }
+
+  const lines = ['Ubertooth reset result:'];
+  for (const [index, result] of results.entries()) {
+    lines.push(`${index + 1}. ${result.preReset?.name ?? 'Ubertooth device'}`);
+    lines.push(`   Interface: ${result.preferredInterfacePath ?? 'Unknown'}`);
+    lines.push(`   Control transfer: ${result.dispatch?.controlTransferSuccess ? 'completed' : 'interrupted as device rebooted'}`);
+    if (!result.dispatch?.controlTransferSuccess) {
+      lines.push(`   Control transfer error: ${result.dispatch?.errorCode ?? 'Unknown'}${result.dispatch?.expectedDisconnectError ? ' (expected during reboot)' : ''}`);
+    }
+    lines.push(`   Reappeared: ${result.successful ? 'yes' : 'no'}`);
+    lines.push(`   Reconnect wait: ${result.elapsedMs} ms across ${result.pollCount} poll(s)`);
+    if (result.protocolRecovery) {
+      lines.push(`   Full recovery: ${result.protocolRecovery.successful ? 'ready' : 'not ready'} after ${result.protocolRecovery.elapsedMs} ms`);
+    }
+    if (result.postReset) {
+      lines.push(`   Post-reset health: ${result.postReset.status} | Driver: ${result.postReset.service} | Ready: ${result.postReset.transportReadiness?.readyForReadOnlyWinUsbExperiment ? 'yes' : 'no'}`);
+    }
+    lines.push('   Safety note: reset is a reboot only; it is not DFU or flashing.');
+  }
+
+  return lines.join('\n');
+}
+
 export function renderProbeResult(probes) {
   if (probes.length === 0) {
     return renderMissingDeviceMessage();
@@ -154,8 +181,9 @@ export function renderStatusResult(entries) {
     lines.push(`   Board: ${protocol?.boardId?.name ?? 'Unknown'} | Serial: ${protocol?.serial ?? 'Unknown'}`);
     lines.push(`   Radio: ${runtime?.radio?.channelMhz ?? 'Unknown'} MHz, ${runtime?.radio?.modulation?.name ?? 'Unknown'}, PA=${runtime?.radio?.paEnabled ? 'on' : 'off'}, HGM=${runtime?.radio?.highGainMode ? 'on' : 'off'}, PA level=${runtime?.radio?.paLevel ?? 'Unknown'}`);
     lines.push(`   LEDs: usr=${runtime?.leds?.usr ? 'on' : 'off'}, rx=${runtime?.leds?.rx ? 'on' : 'off'}, tx=${runtime?.leds?.tx ? 'on' : 'off'} | 1.8V=${runtime?.rails?.cc1v8Enabled ? 'on' : 'off'}`);
-    lines.push('   Safety boundary: read-only only; no DFU, no flashing, no control-out writes.');
+    lines.push('   Safety boundary: getter/info commands are read-only; reset is explicit, guarded, and reboot-only.');
   }
 
   return lines.join('\n');
 }
+

@@ -7,6 +7,9 @@ export const ERROR_CODES = Object.freeze({
   WINUSB_INIT_FAILED: 'E_WINUSB_INIT_FAILED',
   CONTROL_TRANSFER_FAILED: 'E_CONTROL_TRANSFER_FAILED',
   PROTOCOL_PARSE_FAILED: 'E_PROTOCOL_PARSE_FAILED',
+  RESET_CONFIRM_REQUIRED: 'E_RESET_CONFIRM_REQUIRED',
+  RESET_GUARDRAIL: 'E_RESET_GUARDRAIL',
+  RESET_RECONNECT_TIMEOUT: 'E_RESET_RECONNECT_TIMEOUT',
   UNKNOWN: 'E_UNKNOWN'
 });
 
@@ -42,6 +45,20 @@ export function classifyError(error, context = {}) {
     });
   }
 
+  if (/Reset guardrail failed/i.test(message)) {
+    return new CliError(ERROR_CODES.RESET_GUARDRAIL, message, {
+      hint: 'Make sure exactly one Ubertooth is attached and that npm run probe reports the device as ready before retrying reset.',
+      cause: error
+    });
+  }
+
+  if (/did not reappear/i.test(message)) {
+    return new CliError(ERROR_CODES.RESET_RECONNECT_TIMEOUT, message, {
+      hint: 'The reset request may have been sent, but the device did not re-enumerate in time. Re-run detect/probe and reconnect the device if needed.',
+      cause: error
+    });
+  }
+
   if (/WinUsb_Initialize failed/i.test(message)) {
     return new CliError(ERROR_CODES.WINUSB_INIT_FAILED, message, {
       hint: 'The device was found, but Windows did not allow a WinUSB session. Re-check the driver binding and interface path.',
@@ -51,7 +68,7 @@ export function classifyError(error, context = {}) {
 
   if (/WinUsb_ControlTransfer failed/i.test(message) || /ControlTransfer/i.test(message)) {
     return new CliError(ERROR_CODES.CONTROL_TRANSFER_FAILED, message, {
-      hint: 'The device opened successfully, but the requested control-IN read did not complete. Re-check command semantics and interface selection.',
+      hint: 'The device opened successfully, but the requested USB control transfer did not complete. Re-check command semantics and interface selection.',
       cause: error
     });
   }
@@ -71,7 +88,7 @@ export function classifyError(error, context = {}) {
   }
 
   return new CliError(ERROR_CODES.UNKNOWN, message, {
-    hint: context.command ? `Command '${context.command}' failed. Re-run with one of the narrower safe commands (detect/probe/transport/protocol/runtime).` : null,
+    hint: context.command ? `Command '${context.command}' failed. Re-run with one of the narrower safe commands (detect/probe/transport/protocol/runtime/reset).` : null,
     cause: error
   });
 }

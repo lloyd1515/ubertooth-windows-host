@@ -13,6 +13,11 @@ test('classifyError maps Windows-only failures', () => {
   assert.equal(error.code, ERROR_CODES.WINDOWS_ONLY);
 });
 
+test('classifyError maps reset guardrail failures', () => {
+  const error = classifyError(new Error('Reset guardrail failed: no usable interface path was found.'));
+  assert.equal(error.code, ERROR_CODES.RESET_GUARDRAIL);
+});
+
 test('renderCliError includes the code and hint', () => {
   const output = renderCliError(new CliError(ERROR_CODES.NO_DEVICE_FOUND, 'missing', { hint: 'plug it in' }));
   assert.match(output, /E_DEVICE_NOT_FOUND/);

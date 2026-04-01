@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { renderDetectResult, renderInfoResult, renderProbeResult, renderProtocolInfoResult, renderRuntimeInfoResult, renderStatusResult, renderTransportResult, renderVersionResult } from '../src/render.js';
+import { renderDetectResult, renderInfoResult, renderProbeResult, renderProtocolInfoResult, renderRuntimeInfoResult, renderResetResult, renderStatusResult, renderTransportResult, renderVersionResult } from '../src/render.js';
 
 test('renderDetectResult handles no devices', () => {
   assert.equal(renderDetectResult([]), 'No Ubertooth devices found on this Windows host.');
@@ -45,6 +45,23 @@ test('renderVersionResult summarizes concise firmware/build info', () => {
 
   assert.match(output, /Firmware revision: 2020-12-R1/);
   assert.match(output, /API version: 1.07/);
+});
+
+test('renderResetResult summarizes a guarded reset outcome', () => {
+  const output = renderResetResult([
+    {
+      preReset: { name: 'Ubertooth One' },
+      preferredInterfacePath: 'iface',
+      dispatch: { controlTransferSuccess: false, errorCode: 1167, expectedDisconnectError: true },
+      successful: true,
+      elapsedMs: 1500,
+      pollCount: 3,
+      postReset: { status: 'OK', service: 'WINUSB', transportReadiness: { readyForReadOnlyWinUsbExperiment: true } }
+    }
+  ]);
+
+  assert.match(output, /Ubertooth reset result/);
+  assert.match(output, /reboot only; it is not DFU or flashing/i);
 });
 
 test('renderProbeResult shows transport readiness', () => {
@@ -165,5 +182,5 @@ test('renderStatusResult summarizes the current safe public baseline', () => {
   ]);
 
   assert.match(output, /Ubertooth safe status summary/i);
-  assert.match(output, /Safety boundary: read-only only/i);
+  assert.match(output, /reset is explicit, guarded, and reboot-only/i);
 });

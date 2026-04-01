@@ -2,11 +2,12 @@ export function renderHelp() {
   return [
     'Ubertooth Windows Host CLI',
     '',
-    'Safe read-only commands:',
+    'Safe / guarded commands:',
     '  help            Show this help text',
     '  detect          Detect Ubertooth devices on this Windows host',
     '  info            Print raw discovery info as JSON',
     '  version         Print a concise firmware/API/build summary',
+    '  reset           Send a guarded reboot request (requires --yes)',
     '  probe           Print driver/class/readiness metadata',
     '  transport       Prove safe read-only WinUSB open + USB descriptor reads',
     '  protocol        Read official version/info protocol fields',
@@ -15,16 +16,18 @@ export function renderHelp() {
     '',
     'Flags:',
     '  --json          Emit JSON for the selected command',
+    '  --yes           Required for reset because reset intentionally reboots the device',
     '',
     'Safety boundary:',
-    '  - No control-out writes',
+    '  - Getter/info commands stay control-IN only',
+    '  - reset is the only guarded reboot command',
     '  - No DFU',
     '  - No flashing',
-    '  - No mode changes',
+    '  - No write-path chaining with reset',
     '',
     'Examples:',
     '  npm run status',
     '  npm run version',
-    '  node packages/cli/src/index.js runtime --json'
+    '  npm run reset -- --yes'
   ].join('\n');
 }
