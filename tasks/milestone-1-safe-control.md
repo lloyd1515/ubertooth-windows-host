@@ -4,7 +4,7 @@
 - [x] Implement `detect`
 - [x] Implement `info`
 - [x] Implement `version`
-- [ ] Implement safe `reset` *(blocked: would cross the current no-write/no-mode-change safety boundary)*
+- [ ] Implement safe `reset` *(review completed; still pending explicit guardrails + reconnect-based success handling)*
 - [x] Add structured diagnostics
 - [x] Publish reproducible Windows build instructions
 

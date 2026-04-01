@@ -13,9 +13,10 @@
 - [x] Milestone 1: diagnostics taxonomy
 - [x] Milestone 1: install docs
 - [x] Milestone 1: dedicated version command
+- [x] Milestone 1: reset safety review
 
 ## Next
-- [ ] Decide whether `reset` should remain postponed until the safety boundary intentionally expands
+- [ ] Decide whether to implement guarded reset with reconnect-based success checks
 - [ ] Decide whether all runtime getters belong in default UX or should be split into advanced output
 - [ ] Milestone 2: official flashing support
 
