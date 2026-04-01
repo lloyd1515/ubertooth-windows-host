@@ -1,0 +1,18 @@
+# Build output
+bin/
+out/
+dist/
+artifacts/
+coverage/
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# OS noise
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log

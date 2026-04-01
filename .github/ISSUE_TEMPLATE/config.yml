@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Safety boundary reminder
+    url: https://github.com/lloyd1515/ubertooth-windows-host/blob/main/README.md
+    about: Review the current read-only-only boundary before filing issues about flashing or write paths.

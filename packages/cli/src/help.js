@@ -1,0 +1,29 @@
+export function renderHelp() {
+  return [
+    'Ubertooth Windows Host CLI',
+    '',
+    'Safe read-only commands:',
+    '  help            Show this help text',
+    '  detect          Detect Ubertooth devices on this Windows host',
+    '  info            Print raw discovery info as JSON',
+    '  probe           Print driver/class/readiness metadata',
+    '  transport       Prove safe read-only WinUSB open + USB descriptor reads',
+    '  protocol        Read official version/info protocol fields',
+    '  runtime         Read official getter-only runtime state',
+    '  status          Print a single human-friendly summary of the safe capabilities',
+    '',
+    'Flags:',
+    '  --json          Emit JSON for the selected command',
+    '',
+    'Safety boundary:',
+    '  - No control-out writes',
+    '  - No DFU',
+    '  - No flashing',
+    '  - No mode changes',
+    '',
+    'Examples:',
+    '  npm run status',
+    '  npm run protocol-info',
+    '  node packages/cli/src/index.js runtime --json'
+  ].join('\n');
+}

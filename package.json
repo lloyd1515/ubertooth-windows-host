@@ -1,0 +1,43 @@
+{
+  "name": "ubertooth-windows-host",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Windows-first safe read-only Ubertooth host CLI for discovery, diagnostics, and official getter-only protocol access.",
+  "type": "module",
+  "license": "GPL-2.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lloyd1515/ubertooth-windows-host.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lloyd1515/ubertooth-windows-host/issues"
+  },
+  "homepage": "https://github.com/lloyd1515/ubertooth-windows-host#readme",
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "ubertooth-windows-host": "./packages/cli/src/index.js"
+  },
+  "keywords": [
+    "ubertooth",
+    "windows",
+    "winusb",
+    "bluetooth",
+    "ble",
+    "diagnostics"
+  ],
+  "scripts": {
+    "help": "node packages/cli/src/index.js help",
+    "detect": "node packages/cli/src/index.js detect",
+    "info": "node packages/cli/src/index.js info --json",
+    "probe": "node packages/cli/src/index.js probe --json",
+    "transport-check": "node packages/cli/src/index.js transport --json",
+    "protocol-info": "node packages/cli/src/index.js protocol --json",
+    "runtime-info": "node packages/cli/src/index.js runtime --json",
+    "status": "node packages/cli/src/index.js status",
+    "check": "npm run test && npm run help",
+    "prepack": "npm run check",
+    "test": "node --test"
+  }
+}
