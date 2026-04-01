@@ -21,8 +21,7 @@ Current commands are intentionally limited to:
 ## Quickstart
 ```powershell
 cd C:\Users\vlads\Desktop\AN3\Licenta\ubertooth-windows-host
-npm test
-npm run help
+npm run check
 npm run status
 ```
 
@@ -40,7 +39,7 @@ npm run status
 Errors are categorized with stable codes to make GitHub issues less chaotic. See `docs/diagnostics.md`.
 
 ## Release posture
-This is a **credible proofed baseline**, not a full Windows replacement for the Linux toolchain. Releases should clearly state that flashing and write paths are still out of scope. See `docs/release-process.md`.
+This is a **credible proofed baseline**, not a full Windows replacement for the Linux toolchain. Releases should clearly state that flashing and write paths are still out of scope. See `docs/release-process.md` and `CHANGELOG.md`.
 
 ## Public-repo framing
 The project has proven that Windows can safely:
@@ -58,6 +57,7 @@ See also:
 - `docs/quickstart.md`
 - `docs/diagnostics.md`
 - `docs/release-process.md`
+- `docs/repo-hardening.md`
 - `docs/github-launch-checklist.md`
 - `docs/milestone-0-implementation.md`
 - `docs/protocol-research.md`
