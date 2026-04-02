@@ -1,7 +1,7 @@
 # Install and Build Instructions
 
 ## Supported baseline
-Current instructions target the safe Windows baseline plus the official guarded flashing flow.
+Current instructions target the safe Windows baseline. The guarded flash wrapper exists, native Windows proof-build viability for the official flashing toolchain is demonstrated, and one sacrificial-device validation run succeeded. Cleaner user-ready delivery is still pending.
 
 ## Requirements
 - Windows host
@@ -48,8 +48,8 @@ Expected behavior:
 - the control transfer may look interrupted
 - the CLI waits for the device to reappear and for protocol access to settle again
 
-## Guarded official flashing usage
-Flashing is now supported only through the official `ubertooth-dfu` flow.
+## Experimental guarded flash wrapper
+The CLI wrapper for the official `ubertooth-dfu` flow exists. Native Windows proof-build viability is now demonstrated, and one sacrificial-device validation run succeeded, but do **not** assume polished tool delivery is complete yet.
 
 Prerequisites:
 - a real official `.dfu` image
@@ -64,7 +64,9 @@ Optional explicit tool path:
 npm run flash -- --file C:\path\to\bluetooth_rxtx.dfu --tool C:\path\to\ubertooth-dfu.exe --yes
 ```
 
-See `docs/flashing.md` for recovery steps and official-tool expectations.
+See:
+- `docs/flashing.md`
+- `docs/native-windows-flash-blocker.md`
 
 ## What is intentionally not supported yet
 - undocumented DFU/write paths outside the guarded official flash flow
@@ -80,6 +82,7 @@ If `status` fails:
 
 If `flash` fails:
 1. read `docs/flashing.md`
-2. confirm the `.dfu` path is correct
-3. confirm `ubertooth-dfu` is installed or pass `--tool`
-4. if the output mentions `control message unsupported`, recover with official `ubertooth-util -r` or replug the device
+2. read `docs/native-windows-flash-blocker.md`
+3. confirm the `.dfu` path is correct
+4. confirm `ubertooth-dfu` is installed or pass `--tool`
+5. if the output mentions `control message unsupported`, recover with official `ubertooth-util -r` or replug the device

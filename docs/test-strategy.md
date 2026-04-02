@@ -9,11 +9,14 @@ Mirror the OMX test spec with repo-facing language.
 - Observability: structured logs and issue-ready failure bundles
 
 ## Hardware validation lane
-Before claiming guarded flashing is release-ready, run the sacrificial-device procedure in:
+Before claiming guarded flashing is release-ready on Windows:
+- native Windows official-tool viability is now proven in a proof build
+- next, run the sacrificial-device procedure in:
 - `packages/compat-lab/flash-validation-runbook.md`
 - `packages/compat-lab/flash-validation-report-template.md`
 
 Minimum evidence set:
+- native Windows proof-build evidence for the official tools
 - one recorded happy-path flash on sacrificial hardware
 - pre-flash version/status evidence
 - post-flash version/status evidence

@@ -1,6 +1,9 @@
-# Official Flashing on Windows
+# Experimental Flash Wrapper on Windows
 
-This repo now exposes a guarded wrapper around the **official** Ubertooth flashing utility.
+This repo exposes a guarded wrapper around the **official** Ubertooth flashing utility. Native Windows proof-build viability for the official tools is demonstrated, and one sacrificial-device validation run has now succeeded on Windows.
+
+Read this first:
+- `docs/native-windows-flash-blocker.md`
 
 ## What this command does
 `npm run flash` does **not** implement a custom firmware writer.
@@ -14,15 +17,32 @@ It:
 6. waits for the device to reappear
 7. waits for version/status reads to settle again before reporting success
 
-## Requirements
+## Current boundary
+Right now, this repo can honestly claim:
+- the guarded flash wrapper exists
+- the official tool semantics are modeled
+- native Windows proof-build viability for the official tools is demonstrated
+- one sacrificial-device validation run succeeded on native Windows
+- recovery guidance exists
+
+Right now, this repo should **not** claim:
+- that the current proof-build/tooling path is already a polished user delivery flow
+- that no Windows driver setup is required for DFU mode
+- that users should rely on WSL as the supported runtime path
+
+## Requirements for the current Windows path
 - Windows host
 - Ubertooth attached over USB
 - WinUSB binding already working well enough for `npm run probe`
 - official Ubertooth host tools installed, with `ubertooth-dfu` available on `PATH`
   - or pass `--tool <full-path-to-ubertooth-dfu.exe>`
 - official `.dfu` image from an Ubertooth release archive
+- DFU-mode bootloader device (`VID_1D50&PID_6003`) must also be bound to WinUSB for native Windows flashing
 
-## Recommended command
+## Current operator note
+The native Windows path is now proven and validated once on sacrificial hardware, but the DFU driver-binding/tool delivery flow still needs polish before broad end-user rollout.
+
+## Command shape
 ```powershell
 npm run flash -- --file C:\path\to\bluetooth_rxtx.dfu --yes
 ```
@@ -33,9 +53,10 @@ npm run flash -- --file C:\path\to\bluetooth_rxtx.dfu --tool C:\path\to\ubertoot
 ```
 
 ## Hardware validation runbook
-Before calling this path hardware-validated, run:
+The native Windows path has now completed one sacrificial-device validation run. Continue to use:
 - `packages/compat-lab/flash-validation-runbook.md`
 - `packages/compat-lab/flash-validation-report-template.md`
+- `packages/compat-lab/reports/flash-validation-20260402T091212Z.md`
 
 ## Expected output flow
 - the device switches toward DFU mode
@@ -50,6 +71,10 @@ Before calling this path hardware-validated, run:
 - install the official Ubertooth release tools
 - add the tool directory to `PATH`
 - or pass `--tool` explicitly
+
+### DFU mode appears but flashing tool cannot open the device
+- verify that the DFU bootloader device (`usb_bootloader`, `VID_1D50&PID_6003`) is bound to WinUSB
+- if Windows shows driver Problem Code 28 for PID 6003, native flashing will fail until that DFU driver is installed
 
 ### Output ends with `control message unsupported`
 The official docs treat this as a **reset/reconnect problem at the end**, not necessarily a failed firmware write.

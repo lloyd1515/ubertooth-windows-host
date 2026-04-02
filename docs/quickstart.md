@@ -1,7 +1,7 @@
 # Quickstart
 
 ## Goal
-Use the current repo safely on Windows for read-only checks first, then the guarded reset/official flash flows only when you intentionally need them.
+Use the current repo safely on Windows for read-only checks first, then the guarded reset flow, and treat the flash wrapper as experimental until the Windows driver/tool delivery story is cleaner for end users.
 
 ## Prerequisites
 - Windows host
@@ -30,7 +30,9 @@ npm run runtime-info
 npm run flash -- --file C:\path\to\bluetooth_rxtx.dfu --yes
 ```
 
-Read `docs/flashing.md` first so you have the recovery steps ready.
+Read these first so you have the correct boundary and recovery steps:
+- `docs/flashing.md`
+- `docs/native-windows-flash-blocker.md`
 
 ## What success looks like
 - `detect` finds `Ubertooth One`
@@ -38,7 +40,8 @@ Read `docs/flashing.md` first so you have the recovery steps ready.
 - `transport-check` succeeds
 - `protocol-info` returns firmware/build/serial info
 - `runtime-info` returns getter-only runtime fields
-- `flash` only reports success after the device comes back healthy again
+- native Windows proof-build viability for the official flashing tools is demonstrated
+- one sacrificial-device validation run on native Windows has succeeded
 
 ## Safety reminder
-Stop if you are about to use anything outside the current CLI or outside the official Ubertooth firmware tooling. This repo intentionally exposes only guarded reset plus the official guarded flash path.
+Stop if you are about to use anything outside the current CLI or outside the official Ubertooth firmware tooling. This repo intentionally exposes only guarded reset plus an experimental guarded flash wrapper.

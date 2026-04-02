@@ -2,7 +2,7 @@
   "name": "ubertooth-windows-host",
   "version": "0.1.0",
   "private": true,
-  "description": "Windows-first safe Ubertooth host CLI for diagnostics, official getter-only protocol access, a guarded reset path, and official guarded flashing support.",
+  "description": "Windows-first safe Ubertooth host CLI for diagnostics, official getter-only protocol access, a guarded reset path, and an experimental official flash wrapper while native Windows viability is being proven.",
   "type": "module",
   "license": "GPL-2.0-or-later",
   "repository": {

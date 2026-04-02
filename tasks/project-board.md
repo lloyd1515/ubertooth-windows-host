@@ -16,12 +16,14 @@
 - [x] Milestone 1: reset safety review
 - [x] Milestone 1: guarded reset implementation
 - [x] Milestone 2: sacrificial-device validation runbook
+- [x] Milestone 2: native Windows flashing blocker documented
+- [x] Milestone 2: native Windows official-tool viability proven
+- [x] Milestone 2: sacrificial-device validation complete
 
 ## Next
 - [ ] Decide whether all runtime getters belong in default UX or should be split into advanced output
-- [ ] Milestone 2: sacrificial-device validation for official flashing support
+- [ ] Milestone 3: capture/export MVP
 
 ## Later
-- [ ] Milestone 3: capture/export MVP
 - [ ] Milestone 4: public hardening
 - [ ] Phase 2 parity work
