@@ -17,3 +17,16 @@ test('renderHelp documents the guarded official flash workflow', () => {
   assert.match(output, /--file/i);
   assert.match(output, /ubertooth-dfu/i);
 });
+
+test('renderHelp documents the safer Windows setup helper', () => {
+  const output = renderHelp();
+  assert.match(output, /npm run setup-flash-tools/i);
+  assert.match(output, /without installing drivers, modifying PATH, or downloading\/building dependencies/i);
+});
+
+test('renderHelp documents the raw live BLE capture command', () => {
+  const output = renderHelp();
+  assert.match(output, /capture\s+Run the raw live BLE inspector MVP/i);
+  assert.match(output, /--channel/i);
+  assert.match(output, /--timeout-seconds/i);
+});

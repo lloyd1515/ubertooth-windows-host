@@ -6,12 +6,13 @@ import { getReadOnlyRuntimeInfo } from '../../core-usb/src/readOnlyRuntimeInfo.j
 import { performOfficialFlash } from '../../core-usb/src/flashDevice.js';
 import { performGuardedReset } from '../../core-usb/src/resetDevice.js';
 import { runReadOnlyWinUsbExperiment } from '../../core-usb/src/winUsbReadOnlyExperiment.js';
+import { runLiveBleInspector } from '../../capture-export/src/liveBleInspector.js';
 import { classifyError, CliError, ERROR_CODES, renderCliError } from './errors.js';
 import { renderDetectResult, renderFlashResult, renderInfoResult, renderProbeResult, renderProtocolInfoResult, renderRuntimeInfoResult, renderResetResult, renderStatusResult, renderTransportResult, renderVersionResult } from './render.js';
 import { renderHelp } from './help.js';
 import { mergeStatusEntries } from './status.js';
 
-const VALID_COMMANDS = new Set(['help', 'detect', 'info', 'version', 'reset', 'flash', 'probe', 'transport', 'protocol', 'runtime', 'status']);
+const VALID_COMMANDS = new Set(['help', 'detect', 'info', 'version', 'reset', 'flash', 'capture', 'probe', 'transport', 'protocol', 'runtime', 'status']);
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -23,7 +24,9 @@ function parseArgs(argv) {
     command,
     json: false,
     yes: false,
+    channel: null,
     file: null,
+    timeoutSeconds: null,
     tool: null
   };
 
@@ -33,6 +36,11 @@ function parseArgs(argv) {
       parsed.json = true;
     } else if (token === '--yes') {
       parsed.yes = true;
+    } else if (token === '--channel' || token === '-A') {
+      parsed.channel = rest[index + 1] ?? null;
+      index += 1;
+    } else if (token.startsWith('--channel=')) {
+      parsed.channel = token.slice('--channel='.length);
     } else if (token === '--file' || token === '-f') {
       parsed.file = rest[index + 1] ?? null;
       index += 1;
@@ -43,6 +51,11 @@ function parseArgs(argv) {
       index += 1;
     } else if (token.startsWith('--tool=')) {
       parsed.tool = token.slice('--tool='.length);
+    } else if (token === '--timeout-seconds') {
+      parsed.timeoutSeconds = rest[index + 1] ?? null;
+      index += 1;
+    } else if (token.startsWith('--timeout-seconds=')) {
+      parsed.timeoutSeconds = token.slice('--timeout-seconds='.length);
     }
   }
 
@@ -104,6 +117,19 @@ async function main(argv = process.argv.slice(2)) {
 
   if (args.command === 'help') {
     console.log(renderHelp());
+    return;
+  }
+
+  if (args.command === 'capture') {
+    const result = await runLiveBleInspector({
+      toolPath: args.tool ?? null,
+      channel: args.channel,
+      timeoutSeconds: args.timeoutSeconds
+    });
+
+    if (result.timedOut) {
+      console.log(`Capture stopped after ${result.timeoutSeconds} second(s).`);
+    }
     return;
   }
 

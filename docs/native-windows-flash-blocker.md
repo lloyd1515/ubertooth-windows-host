@@ -1,22 +1,23 @@
 # Native Windows Official Flashing Status
 
 ## Status
-The repo now has evidence that the **official Ubertooth flashing tools can be built, executed, and validated natively on Windows**.
+The repo now has evidence that the **official Ubertooth flashing tools can be built, executed, validated natively on Windows, and staged through a safer repo-local setup helper**.
 
 What is proven:
 - the official source stack can be carried far enough on native Windows to build `ubertooth-dfu.exe` and `ubertooth-util.exe`
 - those Windows-built binaries execute successfully
 - the Windows-built `ubertooth-util.exe -N` reports the attached device count successfully
 - one sacrificial-device flash validation run succeeded on native Windows
+- the safer repo-local setup helper stages the validated official Windows-built tools and official firmware asset without auto-installing drivers, silently editing `PATH`, or silently downloading/building dependencies
 
 What is **not** yet proven:
-- a polished/user-ready delivery path for the official tools and DFU driver binding flow
 - broader validation breadth across multiple devices / firmware variants
+- a full consumer-style installer beyond the safer repo-local setup helper
 
 ## Why this matters
 The project is Windows-first. WSL may be used for internal testing, but it is **not** the supported runtime path for users.
 
-This native proof and validation means Milestone 2 no longer needs to stay blocked on Windows viability.
+This native proof, validation, and setup-helper staging mean Milestone 2 no longer needs to stay blocked on Windows viability.
 
 ## Proof evidence
 ### 1. Upstream release story still centers on firmware archives, not Windows host binaries
@@ -58,18 +59,28 @@ Observed outcome:
 ### 6. DFU-mode WinUSB binding is required
 During validation, the bootloader device (`usb_bootloader`, `VID_1D50&PID_6003`) initially failed with Windows Problem Code 28 (no driver installed). Native Windows flashing required binding that DFU-mode device to WinUSB before `ubertooth-dfu.exe` could open it.
 
+### 7. Safer repo-local setup helper now stages the validated path
+`npm run setup-flash-tools` / `scripts/setup-windows-flash-tools.ps1` now stage the validated repo-local Windows-built official tools and the official firmware image into `build/windows-flash-tools` for cleaner use.
+
+The helper intentionally does **not**:
+- install drivers
+- silently modify `PATH`
+- silently download/build dependencies
+- perform hidden admin-wide machine mutation
+
 ## Current decision
 - **Allowed:** use WSL for investigation / comparison work
 - **Not allowed:** treat WSL as the supported flashing/runtime path
-- **Current optimization target:** cleaner Windows delivery and broader follow-up work
+- **Current optimization target:** broader validation breadth and post-Milestone-2 follow-up work
 
 ## Remaining gaps
 Any one of the following would move the project forward:
-1. package/automate the DFU WinUSB driver-binding flow for users
+1. broaden validation breadth across additional devices / firmware variants
 2. preserve the proof patches in a cleaner, more maintainable form
 3. move on to Milestone 3 / capture-export MVP
 
 ## Milestone implication
 - **Proven:** native Windows official-tool viability
 - **Proven:** one sacrificial-device flash validation run on native Windows
-- **Still open:** cleaner end-user delivery / broader validation breadth
+- **Proven:** a safer repo-local setup helper for the validated Windows flashing assets
+- **Still open:** broader validation breadth / later milestone work

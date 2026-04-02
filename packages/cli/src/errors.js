@@ -2,6 +2,9 @@ export const ERROR_CODES = Object.freeze({
   UNSUPPORTED_COMMAND: 'E_CLI_UNSUPPORTED_COMMAND',
   WINDOWS_ONLY: 'E_PLATFORM_WINDOWS_ONLY',
   NO_DEVICE_FOUND: 'E_DEVICE_NOT_FOUND',
+  CAPTURE_GUARDRAIL: 'E_CAPTURE_GUARDRAIL',
+  CAPTURE_TOOL_NOT_FOUND: 'E_CAPTURE_TOOL_NOT_FOUND',
+  CAPTURE_FAILED: 'E_CAPTURE_FAILED',
   PNP_QUERY_FAILED: 'E_PNP_QUERY_FAILED',
   INTERFACE_DISCOVERY_FAILED: 'E_INTERFACE_DISCOVERY_FAILED',
   WINUSB_INIT_FAILED: 'E_WINUSB_INIT_FAILED',
@@ -48,6 +51,21 @@ export function classifyError(error, context = {}) {
   if (/No Ubertooth devices found/i.test(message)) {
     return new CliError(ERROR_CODES.NO_DEVICE_FOUND, message, {
       hint: 'Check the USB cable, WinUSB binding, and whether the device appears in Device Manager.',
+      cause: error
+    });
+  }
+
+  if (/Capture guardrail failed/i.test(message)) {
+    const code = /official ubertooth-btle executable/i.test(message)
+      ? ERROR_CODES.CAPTURE_TOOL_NOT_FOUND
+      : ERROR_CODES.CAPTURE_GUARDRAIL;
+
+    const hint = code === ERROR_CODES.CAPTURE_TOOL_NOT_FOUND
+      ? 'Use the repo-local Windows-built ubertooth-btle.exe or pass --tool <path-to-ubertooth-btle.exe> when retrying capture.'
+      : 'Use one reliable capture mode only and keep --channel limited to 37, 38, or 39 for the Milestone 3 MVP.';
+
+    return new CliError(code, message, {
+      hint,
       cause: error
     });
   }
@@ -120,8 +138,15 @@ export function classifyError(error, context = {}) {
     });
   }
 
+  if (/Live BLE capture failed/i.test(message)) {
+    return new CliError(ERROR_CODES.CAPTURE_FAILED, message, {
+      hint: 'Re-run the capture with the repo-local ubertooth-btle.exe path and a known-good advertising channel (37, 38, or 39).',
+      cause: error
+    });
+  }
+
   return new CliError(ERROR_CODES.UNKNOWN, message, {
-    hint: context.command ? `Command '${context.command}' failed. Re-run with one of the narrower supported commands (detect/probe/transport/protocol/runtime/reset/flash).` : null,
+    hint: context.command ? `Command '${context.command}' failed. Re-run with one of the narrower supported commands (detect/probe/transport/protocol/runtime/reset/flash/capture).` : null,
     cause: error
   });
 }

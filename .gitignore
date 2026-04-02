@@ -4,6 +4,7 @@ out/
 dist/
 artifacts/
 coverage/
+build/
 
 # Editors
 .vscode/
@@ -16,3 +17,16 @@ Desktop.ini
 
 # Logs
 *.log
+
+# Local agent/runtime state
+.omx/
+.omc/
+official-libwdi-user/
+
+# Official release assets: keep only the validated firmware image used by the repo-local helper
+official-release/*
+!official-release/ubertooth-2020-12-R1/
+official-release/ubertooth-2020-12-R1/*
+!official-release/ubertooth-2020-12-R1/ubertooth-one-firmware-bin/
+official-release/ubertooth-2020-12-R1/ubertooth-one-firmware-bin/*
+!official-release/ubertooth-2020-12-R1/ubertooth-one-firmware-bin/bluetooth_rxtx.dfu

@@ -1,10 +1,11 @@
 # Project Board Seed
 
 ## Now
-- [ ] Milestone 3: capture/export MVP
+- [ ] Milestone 3: bounded file export for the raw live BLE inspector
 
 ## Next
 - [ ] Decide whether all runtime getters belong in default UX or should be split into advanced output
+- [ ] Record broader BLE parity gaps after the first reliable follow-mode slice
 - [ ] Milestone 4: public hardening
 
 ## Later
@@ -31,3 +32,4 @@
 - [x] Milestone 2: sacrificial-device validation complete
 - [x] Milestone 2: DFU mode (PID 6003) integrated into CLI
 - [x] Milestone 2: libusb dependencies resolved for official tools
+- [x] Milestone 3: raw live BLE inspector slice

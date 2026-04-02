@@ -2,7 +2,7 @@
   "name": "ubertooth-windows-host",
   "version": "0.1.0",
   "private": true,
-  "description": "Windows-first safe Ubertooth host CLI for diagnostics, official getter-only protocol access, a guarded reset path, and an experimental official flash wrapper while native Windows viability is being proven.",
+  "description": "Windows-first safe Ubertooth host CLI for diagnostics, official getter-only protocol access, a guarded reset path, an experimental guarded official flash wrapper, and a safer repo-local Windows setup helper.",
   "type": "module",
   "license": "GPL-2.0-or-later",
   "repository": {
@@ -28,12 +28,14 @@
     "diagnostics"
   ],
   "scripts": {
+    "capture": "node packages/cli/src/index.js capture",
     "help": "node packages/cli/src/index.js help",
     "detect": "node packages/cli/src/index.js detect",
     "info": "node packages/cli/src/index.js info --json",
     "version": "node packages/cli/src/index.js version",
     "reset": "node packages/cli/src/index.js reset",
     "flash": "node packages/cli/src/index.js flash",
+    "setup-flash-tools": "powershell -ExecutionPolicy Bypass -File .\\scripts\\setup-windows-flash-tools.ps1",
     "probe": "node packages/cli/src/index.js probe --json",
     "transport-check": "node packages/cli/src/index.js transport --json",
     "protocol-info": "node packages/cli/src/index.js protocol --json",

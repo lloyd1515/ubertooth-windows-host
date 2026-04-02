@@ -19,13 +19,23 @@ test('classifyError maps reset guardrail failures', () => {
 });
 
 test('classifyError maps flash file validation failures', () => {
-  const error = classifyError(new Error('Flash guardrail failed: firmware image was not found at C:\\missing\\bluetooth_rxtx.dfu.'));
+  const error = classifyError(new Error('Flash guardrail failed: firmware image was not found at C:\missing\bluetooth_rxtx.dfu.'));
   assert.equal(error.code, ERROR_CODES.FLASH_FILE_REQUIRED);
 });
 
 test('classifyError maps flash execution failures', () => {
   const error = classifyError(new Error('Official flash failed: libUSB Error: Command Error: (-1)'));
   assert.equal(error.code, ERROR_CODES.FLASH_FAILED);
+});
+
+test('classifyError maps capture tool lookup failures', () => {
+  const error = classifyError(new Error("Capture guardrail failed: official ubertooth-btle executable 'missing.exe' was not found."));
+  assert.equal(error.code, ERROR_CODES.CAPTURE_TOOL_NOT_FOUND);
+});
+
+test('classifyError maps capture execution failures', () => {
+  const error = classifyError(new Error('Live BLE capture failed: ubertooth-btle exited with code 1.'));
+  assert.equal(error.code, ERROR_CODES.CAPTURE_FAILED);
 });
 
 test('renderCliError includes the code and hint', () => {
