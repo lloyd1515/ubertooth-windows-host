@@ -1,6 +1,16 @@
 # Project Board Seed
 
 ## Now
+- [ ] Milestone 3: capture/export MVP
+
+## Next
+- [ ] Decide whether all runtime getters belong in default UX or should be split into advanced output
+- [ ] Milestone 4: public hardening
+
+## Later
+- [ ] Phase 2 parity work
+
+## Completed
 - [x] Milestone 0: USB stack decision
 - [x] Milestone 0: safe enumeration proof
 - [x] Milestone 0: architecture memo
@@ -19,11 +29,5 @@
 - [x] Milestone 2: native Windows flashing blocker documented
 - [x] Milestone 2: native Windows official-tool viability proven
 - [x] Milestone 2: sacrificial-device validation complete
-
-## Next
-- [ ] Decide whether all runtime getters belong in default UX or should be split into advanced output
-- [ ] Milestone 3: capture/export MVP
-
-## Later
-- [ ] Milestone 4: public hardening
-- [ ] Phase 2 parity work
+- [x] Milestone 2: DFU mode (PID 6003) integrated into CLI
+- [x] Milestone 2: libusb dependencies resolved for official tools

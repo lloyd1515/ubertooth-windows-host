@@ -10,6 +10,8 @@
 - [x] Document native Windows official-tool blocker
 - [x] Prove native Windows official-tool viability
 - [x] Validate on sacrificial test devices
+- [x] Integrate PID 6003 (DFU mode) into CLI discovery
+- [x] Resolve official-tool libusb dependency on Windows
 
 ## Exit criteria
 - [x] Recovery path documented

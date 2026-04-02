@@ -1,6 +1,7 @@
 export const UBERTOOTH_USB_ID = Object.freeze({
   vendorId: '1D50',
   productId: '6002',
+  dfuProductId: '6003',
   manufacturer: 'Great Scott Gadgets',
   productName: 'Ubertooth One'
 });
@@ -28,7 +29,7 @@ export function matchesUbertoothPnpId(pnpDeviceId) {
   return Boolean(
     ids &&
     ids.vendorId === UBERTOOTH_USB_ID.vendorId &&
-    ids.productId === UBERTOOTH_USB_ID.productId
+    (ids.productId === UBERTOOTH_USB_ID.productId || ids.productId === UBERTOOTH_USB_ID.dfuProductId)
   );
 }
 
