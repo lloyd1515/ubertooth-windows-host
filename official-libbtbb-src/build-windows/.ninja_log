@@ -1,0 +1,8 @@
+# ninja log v7
+12	415	7968221605360234	lib/src/CMakeFiles/btbb.dir/bluetooth_piconet.c.obj	7ec9fd0b61c55d52
+6	718	7968221605304804	lib/src/CMakeFiles/btbb.dir/bluetooth_packet.c.obj	f8ab357bee2efd24
+416	724	7968221609401782	lib/src/CMakeFiles/btbb.dir/bluetooth_le_packet.c.obj	1dd860185b3c2e13
+724	830	7968221612476702	lib/src/CMakeFiles/btbb.dir/pcap_stubs.c.obj	3dd3cd47f58954d2
+718	900	7968221612424414	lib/src/CMakeFiles/btbb.dir/companies.c.obj	c9db67ff44ddf876
+900	1082	7968221615943072	lib/src/libbtbb.dll	6a094db36eb5e744
+900	1082	7968221615943072	lib/src/libbtbb.dll.a	6a094db36eb5e744

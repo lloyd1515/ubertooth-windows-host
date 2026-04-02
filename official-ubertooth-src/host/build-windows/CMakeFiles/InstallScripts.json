@@ -1,0 +1,15 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/vlads/Desktop/AN3/Licenta/ubertooth-windows-host/official-ubertooth-src/host/build-windows/cmake_install.cmake",
+		"C:/Users/vlads/Desktop/AN3/Licenta/ubertooth-windows-host/official-ubertooth-src/host/build-windows/libubertooth/cmake_install.cmake",
+		"C:/Users/vlads/Desktop/AN3/Licenta/ubertooth-windows-host/official-ubertooth-src/host/build-windows/libubertooth/src/cmake_install.cmake",
+		"C:/Users/vlads/Desktop/AN3/Licenta/ubertooth-windows-host/official-ubertooth-src/host/build-windows/ubertooth-tools/cmake_install.cmake",
+		"C:/Users/vlads/Desktop/AN3/Licenta/ubertooth-windows-host/official-ubertooth-src/host/build-windows/ubertooth-tools/src/cmake_install.cmake",
+		"C:/Users/vlads/Desktop/AN3/Licenta/ubertooth-windows-host/official-ubertooth-src/host/build-windows/doc/cmake_install.cmake",
+		"C:/Users/vlads/Desktop/AN3/Licenta/ubertooth-windows-host/official-ubertooth-src/host/build-windows/doc/man/cmake_install.cmake",
+		"C:/Users/vlads/Desktop/AN3/Licenta/ubertooth-windows-host/official-ubertooth-src/host/build-windows/misc/cmake_install.cmake",
+		"C:/Users/vlads/Desktop/AN3/Licenta/ubertooth-windows-host/official-ubertooth-src/host/build-windows/misc/udev/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
