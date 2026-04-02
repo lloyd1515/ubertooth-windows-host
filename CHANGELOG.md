@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+### Added
+- guarded `flash` command that wraps the official `ubertooth-dfu` workflow
+- `.dfu` image validation, explicit `--yes` confirmation, and reconnect verification
+- flashing recovery guide for Windows users
+
+### Safety boundary
+- no custom firmware write implementation
+- no undocumented DFU/write path exposure
+- flashing stays pinned to the official tool semantics
+
 ## v0.1.0 - Safe Windows read-only baseline
 
 Initial public baseline for a Windows-first Ubertooth host workflow that stays strictly in read-only territory.

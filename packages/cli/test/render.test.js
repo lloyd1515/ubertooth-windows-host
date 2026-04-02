@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { renderDetectResult, renderInfoResult, renderProbeResult, renderProtocolInfoResult, renderRuntimeInfoResult, renderResetResult, renderStatusResult, renderTransportResult, renderVersionResult } from '../src/render.js';
+import { renderDetectResult, renderFlashResult, renderInfoResult, renderProbeResult, renderProtocolInfoResult, renderRuntimeInfoResult, renderResetResult, renderStatusResult, renderTransportResult, renderVersionResult } from '../src/render.js';
 
 test('renderDetectResult handles no devices', () => {
   assert.equal(renderDetectResult([]), 'No Ubertooth devices found on this Windows host.');
@@ -62,6 +62,31 @@ test('renderResetResult summarizes a guarded reset outcome', () => {
 
   assert.match(output, /Ubertooth reset result/);
   assert.match(output, /reboot only; it is not DFU or flashing/i);
+});
+
+test('renderFlashResult summarizes the guarded official flashing flow', () => {
+  const output = renderFlashResult([
+    {
+      preFlash: { name: 'Ubertooth One' },
+      firmware: { firmwarePath: 'C:\\firmware\\bluetooth_rxtx.dfu' },
+      flashExecutable: 'ubertooth-dfu.exe',
+      dispatch: { switchedToDfu: true, signatureCheckObserved: true },
+      successful: true,
+      elapsedMs: 6400,
+      pollCount: 7,
+      postFlash: { status: 'OK', service: 'WINUSB', transportReadiness: { readyForReadOnlyWinUsbExperiment: true } },
+      preFlashProtocolEntry: { protocolInfo: { parsed: { firmwareRevision: '2018-12-R1', apiVersion: { formatted: '1.06' } } } },
+      protocolRecovery: {
+        successful: true,
+        elapsedMs: 9100,
+        protocolEntry: { protocolInfo: { parsed: { firmwareRevision: '2020-12-R1', apiVersion: { formatted: '1.07' } } } }
+      }
+    }
+  ]);
+
+  assert.match(output, /official flash result/i);
+  assert.match(output, /Pre-flash firmware\/API: 2018-12-R1 \/ 1.06/);
+  assert.match(output, /Post-flash firmware\/API: 2020-12-R1 \/ 1.07/);
 });
 
 test('renderProbeResult shows transport readiness', () => {

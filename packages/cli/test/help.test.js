@@ -10,3 +10,10 @@ test('renderHelp documents the reset command, status/version commands, and safet
   assert.match(output, /version\s+Print a concise firmware\/API\/build summary/i);
   assert.match(output, /requires --yes/i);
 });
+
+test('renderHelp documents the guarded official flash workflow', () => {
+  const output = renderHelp();
+  assert.match(output, /flash\s+Run the official guarded firmware flow/i);
+  assert.match(output, /--file/i);
+  assert.match(output, /ubertooth-dfu/i);
+});

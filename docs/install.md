@@ -1,7 +1,7 @@
 # Install and Build Instructions
 
 ## Supported baseline
-Current instructions target the safe Windows baseline only.
+Current instructions target the safe Windows baseline plus the official guarded flashing flow.
 
 ## Requirements
 - Windows host
@@ -48,10 +48,27 @@ Expected behavior:
 - the control transfer may look interrupted
 - the CLI waits for the device to reappear and for protocol access to settle again
 
+## Guarded official flashing usage
+Flashing is now supported only through the official `ubertooth-dfu` flow.
+
+Prerequisites:
+- a real official `.dfu` image
+- the official `ubertooth-dfu` tool on `PATH`, or a full path passed with `--tool`
+
+```powershell
+npm run flash -- --file C:\path\to\bluetooth_rxtx.dfu --yes
+```
+
+Optional explicit tool path:
+```powershell
+npm run flash -- --file C:\path\to\bluetooth_rxtx.dfu --tool C:\path\to\ubertooth-dfu.exe --yes
+```
+
+See `docs/flashing.md` for recovery steps and official-tool expectations.
+
 ## What is intentionally not supported yet
-- flashing
-- DFU
-- write/control-out paths other than guarded reset
+- undocumented DFU/write paths outside the guarded official flash flow
+- write/control-out paths other than guarded reset and guarded official flash
 - capture/sniffing
 
 ## Troubleshooting
@@ -60,3 +77,9 @@ If `status` fails:
 2. run `npm run probe`
 3. confirm the device is bound to WinUSB
 4. include the CLI error code in any GitHub issue
+
+If `flash` fails:
+1. read `docs/flashing.md`
+2. confirm the `.dfu` path is correct
+3. confirm `ubertooth-dfu` is installed or pass `--tool`
+4. if the output mentions `control message unsupported`, recover with official `ubertooth-util -r` or replug the device

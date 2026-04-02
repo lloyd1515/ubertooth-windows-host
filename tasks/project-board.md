@@ -15,10 +15,11 @@
 - [x] Milestone 1: dedicated version command
 - [x] Milestone 1: reset safety review
 - [x] Milestone 1: guarded reset implementation
+- [x] Milestone 2: sacrificial-device validation runbook
 
 ## Next
 - [ ] Decide whether all runtime getters belong in default UX or should be split into advanced output
-- [ ] Milestone 2: official flashing support
+- [ ] Milestone 2: sacrificial-device validation for official flashing support
 
 ## Later
 - [ ] Milestone 3: capture/export MVP

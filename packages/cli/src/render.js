@@ -75,6 +75,45 @@ export function renderResetResult(results) {
   return lines.join('\n');
 }
 
+export function renderFlashResult(results) {
+  if (results.length === 0) {
+    return renderMissingDeviceMessage();
+  }
+
+  const lines = ['Ubertooth official flash result:'];
+  for (const [index, result] of results.entries()) {
+    const preInfo = result.preFlashProtocolEntry?.protocolInfo?.parsed;
+    const postInfo = result.protocolRecovery?.protocolEntry?.protocolInfo?.parsed;
+    lines.push(`${index + 1}. ${result.preFlash?.name ?? 'Ubertooth device'}`);
+    lines.push(`   Firmware image: ${result.firmware?.firmwarePath ?? 'Unknown'}`);
+    lines.push(`   Tool: ${result.flashExecutable ?? 'ubertooth-dfu'}`);
+    lines.push(`   Switched to DFU: ${result.dispatch?.switchedToDfu ? 'yes' : 'not observed'}`);
+    lines.push(`   Signature check observed: ${result.dispatch?.signatureCheckObserved ? 'yes' : 'not observed'}`);
+    if (preInfo) {
+      lines.push(`   Pre-flash firmware/API: ${preInfo.firmwareRevision ?? 'Unknown'} / ${preInfo.apiVersion?.formatted ?? 'Unknown'}`);
+    }
+    if (postInfo) {
+      lines.push(`   Post-flash firmware/API: ${postInfo.firmwareRevision ?? 'Unknown'} / ${postInfo.apiVersion?.formatted ?? 'Unknown'}`);
+    }
+    if (result.recoveryRequired) {
+      lines.push('   Recovery: required before status can be trusted');
+      lines.push('   Next step: run official ubertooth-util -r or unplug/replug the device, then re-run status/version.');
+    } else {
+      lines.push(`   Reappeared: ${result.successful ? 'yes' : 'no'}`);
+      lines.push(`   Reconnect wait: ${result.elapsedMs} ms across ${result.pollCount} poll(s)`);
+      if (result.protocolRecovery) {
+        lines.push(`   Full recovery: ${result.protocolRecovery.successful ? 'ready' : 'not ready'} after ${result.protocolRecovery.elapsedMs} ms`);
+      }
+      if (result.postFlash) {
+        lines.push(`   Post-flash health: ${result.postFlash.status ?? 'Unknown'} | Driver: ${result.postFlash.service ?? 'Unknown'} | Ready: ${result.postFlash.transportReadiness?.readyForReadOnlyWinUsbExperiment ? 'yes' : 'no'}`);
+      }
+    }
+    lines.push('   Safety note: flash only wraps the official ubertooth-dfu flow and keeps recovery guidance explicit.');
+  }
+
+  return lines.join('\n');
+}
+
 export function renderProbeResult(probes) {
   if (probes.length === 0) {
     return renderMissingDeviceMessage();
@@ -186,4 +225,3 @@ export function renderStatusResult(entries) {
 
   return lines.join('\n');
 }
-

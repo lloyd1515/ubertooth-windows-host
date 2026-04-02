@@ -10,6 +10,13 @@ export const ERROR_CODES = Object.freeze({
   RESET_CONFIRM_REQUIRED: 'E_RESET_CONFIRM_REQUIRED',
   RESET_GUARDRAIL: 'E_RESET_GUARDRAIL',
   RESET_RECONNECT_TIMEOUT: 'E_RESET_RECONNECT_TIMEOUT',
+  FLASH_CONFIRM_REQUIRED: 'E_FLASH_CONFIRM_REQUIRED',
+  FLASH_FILE_REQUIRED: 'E_FLASH_FILE_REQUIRED',
+  FLASH_GUARDRAIL: 'E_FLASH_GUARDRAIL',
+  FLASH_TOOL_NOT_FOUND: 'E_FLASH_TOOL_NOT_FOUND',
+  FLASH_FAILED: 'E_FLASH_FAILED',
+  FLASH_RECONNECT_TIMEOUT: 'E_FLASH_RECONNECT_TIMEOUT',
+  FLASH_RECOVERY_REQUIRED: 'E_FLASH_RECOVERY_REQUIRED',
   UNKNOWN: 'E_UNKNOWN'
 });
 
@@ -52,6 +59,25 @@ export function classifyError(error, context = {}) {
     });
   }
 
+  if (/Flash guardrail failed/i.test(message)) {
+    const code = /--file is required|firmware image .*not found|must use the \.dfu extension|is not a file/i.test(message)
+      ? ERROR_CODES.FLASH_FILE_REQUIRED
+      : /executable .* was not found on PATH/i.test(message)
+        ? ERROR_CODES.FLASH_TOOL_NOT_FOUND
+        : ERROR_CODES.FLASH_GUARDRAIL;
+
+    const hint = code === ERROR_CODES.FLASH_FILE_REQUIRED
+      ? 'Pass --file <path-to-official.dfu> and make sure the image exists before retrying flash.'
+      : code === ERROR_CODES.FLASH_TOOL_NOT_FOUND
+        ? 'Install the official Ubertooth host tools or pass --tool <path-to-ubertooth-dfu.exe> when retrying flash.'
+        : 'Make sure exactly one Ubertooth is attached, the device is probe-ready, and the official firmware image is selected.';
+
+    return new CliError(code, message, {
+      hint,
+      cause: error
+    });
+  }
+
   if (/did not reappear/i.test(message)) {
     return new CliError(ERROR_CODES.RESET_RECONNECT_TIMEOUT, message, {
       hint: 'The reset request may have been sent, but the device did not re-enumerate in time. Re-run detect/probe and reconnect the device if needed.',
@@ -87,8 +113,15 @@ export function classifyError(error, context = {}) {
     });
   }
 
+  if (/Official flash failed/i.test(message)) {
+    return new CliError(ERROR_CODES.FLASH_FAILED, message, {
+      hint: 'Re-run the flash with an official .dfu image and inspect the ubertooth-dfu output for the failing stage.',
+      cause: error
+    });
+  }
+
   return new CliError(ERROR_CODES.UNKNOWN, message, {
-    hint: context.command ? `Command '${context.command}' failed. Re-run with one of the narrower safe commands (detect/probe/transport/protocol/runtime/reset).` : null,
+    hint: context.command ? `Command '${context.command}' failed. Re-run with one of the narrower supported commands (detect/probe/transport/protocol/runtime/reset/flash).` : null,
     cause: error
   });
 }

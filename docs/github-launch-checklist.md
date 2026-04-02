@@ -17,8 +17,9 @@ Repo target:
 - [ ] review `README.md`, `SECURITY.md`, `CONTRIBUTING.md`
 - [ ] verify `npm run status` on real hardware one more time
 
-## First public milestone should state
-- read-only Windows baseline only
-- no flashing
-- no DFU
-- no write path support yet
+## Current public milestone should state
+- safe Windows baseline for detection, diagnostics, and getter-only reads
+- guarded reboot-only `reset`
+- guarded official `flash` wrapper around `ubertooth-dfu`
+- no undocumented DFU/write path support
+- sacrificial-hardware flash validation status should be stated explicitly

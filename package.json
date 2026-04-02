@@ -2,7 +2,7 @@
   "name": "ubertooth-windows-host",
   "version": "0.1.0",
   "private": true,
-  "description": "Windows-first safe Ubertooth host CLI for diagnostics, official getter-only protocol access, and a guarded reset path.",
+  "description": "Windows-first safe Ubertooth host CLI for diagnostics, official getter-only protocol access, a guarded reset path, and official guarded flashing support.",
   "type": "module",
   "license": "GPL-2.0-or-later",
   "repository": {
@@ -33,6 +33,7 @@
     "info": "node packages/cli/src/index.js info --json",
     "version": "node packages/cli/src/index.js version",
     "reset": "node packages/cli/src/index.js reset",
+    "flash": "node packages/cli/src/index.js flash",
     "probe": "node packages/cli/src/index.js probe --json",
     "transport-check": "node packages/cli/src/index.js transport --json",
     "protocol-info": "node packages/cli/src/index.js protocol --json",

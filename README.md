@@ -10,13 +10,14 @@ This repo currently supports a **safe Windows baseline** for Ubertooth One:
 - read official firmware/version/build/board/serial/part information
 - read official getter-only runtime state (LEDs, channel, modulation, PA flags, squelch, clock)
 - perform a **guarded reboot-only reset** with reconnect-based success handling
+- run the **official guarded flashing flow** with `.dfu` preflight checks and recovery guidance
 
 ## Safety boundary
 Current commands are intentionally limited to:
 - **control-IN** reads for getter/info commands
 - one explicit guarded `reset` command
-- no DFU
-- no flashing
+- one explicit guarded `flash` command that only wraps `ubertooth-dfu`
+- no undocumented DFU/write path
 - no write-path chaining with reset
 
 ## Quickstart
@@ -31,6 +32,7 @@ npm run status
 - `npm run status` — human-friendly safe summary
 - `npm run version` — concise firmware/API/build summary
 - `npm run reset -- --yes` — guarded reboot request with reconnect verification
+- `npm run flash -- --file C:\path\to\bluetooth_rxtx.dfu --yes` — official guarded firmware update
 - `npm run detect` — minimal detection output
 - `npm run probe` — driver and readiness metadata
 - `npm run transport-check` — WinUSB open + descriptor validation
@@ -42,10 +44,10 @@ npm run status
 Errors are categorized with stable codes to make GitHub issues less chaotic. See `docs/diagnostics.md`.
 
 ## Install / build
-See `docs/install.md` for the reproducible Windows setup and `npm link` workflow.
+See `docs/install.md` for the reproducible Windows setup, `docs/flashing.md` for the guarded firmware workflow, and `npm link` for local CLI usage.
 
 ## Release posture
-This is a **credible proofed baseline**, not a full Windows replacement for the Linux toolchain. Releases should clearly state that flashing and write paths are still out of scope. See `docs/release-process.md` and `CHANGELOG.md`.
+This is a **credible Windows baseline with an official guarded flash path**, not a full Windows replacement for the Linux toolchain. Releases should still clearly scope what remains unsupported. See `docs/release-process.md` and `CHANGELOG.md`.
 
 ## Public-repo framing
 The project has proven that Windows can safely:
@@ -54,15 +56,17 @@ The project has proven that Windows can safely:
 - open the device read-only
 - speak official getter-only protocol requests
 - send a guarded reboot request and verify that the device comes back
+- wrap the official `ubertooth-dfu` flow with preflight checks and recovery docs
 
 ## Next recommended work
 1. keep reset explicit and guarded
 2. keep diagnostics sharp and actionable
-3. only add new commands after official-source review confirms they are safe enough for the repo boundary
+3. validate the official flash path on sacrificial hardware before broad release messaging
 
 See also:
 - `docs/quickstart.md`
 - `docs/install.md`
+- `docs/flashing.md`
 - `docs/diagnostics.md`
 - `docs/release-process.md`
 - `docs/reset-safety-review.md`

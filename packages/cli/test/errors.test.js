@@ -18,6 +18,16 @@ test('classifyError maps reset guardrail failures', () => {
   assert.equal(error.code, ERROR_CODES.RESET_GUARDRAIL);
 });
 
+test('classifyError maps flash file validation failures', () => {
+  const error = classifyError(new Error('Flash guardrail failed: firmware image was not found at C:\\missing\\bluetooth_rxtx.dfu.'));
+  assert.equal(error.code, ERROR_CODES.FLASH_FILE_REQUIRED);
+});
+
+test('classifyError maps flash execution failures', () => {
+  const error = classifyError(new Error('Official flash failed: libUSB Error: Command Error: (-1)'));
+  assert.equal(error.code, ERROR_CODES.FLASH_FAILED);
+});
+
 test('renderCliError includes the code and hint', () => {
   const output = renderCliError(new CliError(ERROR_CODES.NO_DEVICE_FOUND, 'missing', { hint: 'plug it in' }));
   assert.match(output, /E_DEVICE_NOT_FOUND/);
