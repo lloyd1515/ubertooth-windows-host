@@ -7,8 +7,8 @@ $ErrorActionPreference = 'Stop'
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $toolSourceCandidates = @(
-  Join-Path $repoRoot 'official-ubertooth-src\host\build-win-new\ubertooth-tools\src',
-  Join-Path $repoRoot 'official-ubertooth-src\host\build-windows\ubertooth-tools\src'
+  (Join-Path $repoRoot 'official-ubertooth-src\host\build-win-new\ubertooth-tools\src'),
+  (Join-Path $repoRoot 'official-ubertooth-src\host\build-windows\ubertooth-tools\src')
 )
 
 $toolSourceDir = $toolSourceCandidates[0]

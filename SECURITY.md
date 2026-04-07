@@ -9,18 +9,14 @@ Only the latest `main` branch is supported for security updates.
 | v0.2.x  | ✅         |
 | v0.1.x  | ❌         |
 
+## Regulatory & NIST Compliance
+This project aligns with **NIST SP 800-121r2 (Guide to Bluetooth Security)** [2] for robust host-side interaction:
+-   **Visibility**: We recommend keeping Ubertooth-monitored devices in "Non-discoverable" mode unless an active scan is required.
+-   **Pairing Mode**: This host scaffold prioritizes modes that avoid "Just Works" pairing for sensitive data, favoring **Numeric Comparison** or **Passkey Entry** to mitigate MITM risks.
+-   **Legacy Deprecation**: We discourage use with Bluetooth 2.0 or earlier due to weak E0/E1 encryption.
+
 ## Hardware Vulnerability Disclosure
-As this project interacts directly with the **Ubertooth One** hardware, we take RF safety and hardware security seriously.
-
-1.  **Safety First**: If you discover a vulnerability that could cause **physical damage** to the hardware (e.g., thermal overload, RF front-end destruction), please report it IMMEDIATELY as described below.
-2.  **Reporting**: Do not open a public GitHub issue. Send a detailed report via the official project communication channel (email/slack) as defined in the maintainer's profile.
-3.  **Process**: We aim to acknowledge reports within 48 hours and provide a mitigation plan within 7 days.
-4.  **Hardware Failures**: This policy covers software-induced hardware failures. For pure hardware defects, please consult the original hardware manufacturer.
-
-## Software Security
-For standard software vulnerabilities (buffer overflows, PowerShell injection, etc.):
-- Please report via the GitHub "Report a vulnerability" button.
-- We follow a 90-day disclosure timeline.
-
-## Disclosure Sources
-Our security practices are aligned with the **OpenSSF Best Practices** [3] and **NIST SP 800-121r2-upd1** for Bluetooth security.
+...
+## Sources
+- [2] NIST SP 800-121r2 - Guide to Bluetooth Security (Revision 2, Jan 2022)
+- [3] OpenSSF Best Practices (Scorecard v5) - SHA-Pinning and Scoped Tokens

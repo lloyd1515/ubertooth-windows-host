@@ -33,8 +33,8 @@ CMAKE_AR:FILEPATH=C:/msys64/ucrt64/bin/ar.exe
 // MinSizeRel ...
 CMAKE_BUILD_TYPE:STRING=Release
 
-//CXX compiler
-CMAKE_CXX_COMPILER:FILEPATH=C:/msys64/ucrt64/bin/c++.exe
+//No help, variable specified on the command line.
+CMAKE_CXX_COMPILER:UNINITIALIZED=C:/msys64/ucrt64/bin/c++.exe
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -62,8 +62,8 @@ CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 //Libraries linked by default with all C++ applications.
 CMAKE_CXX_STANDARD_LIBRARIES:STRING=-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
 
-//C compiler
-CMAKE_C_COMPILER:FILEPATH=C:/msys64/ucrt64/bin/cc.exe
+//No help, variable specified on the command line.
+CMAKE_C_COMPILER:UNINITIALIZED=C:/msys64/ucrt64/bin/cc.exe
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -77,16 +77,16 @@ CMAKE_C_COMPILER_RANLIB:FILEPATH=C:/msys64/ucrt64/bin/gcc-ranlib.exe
 CMAKE_C_FLAGS:STRING=
 
 //Flags used by the C compiler during DEBUG builds.
-CMAKE_C_FLAGS_DEBUG:STRING=-g
+CMAKE_C_FLAGS_DEBUG:STRING=
 
 //Flags used by the C compiler during MINSIZEREL builds.
-CMAKE_C_FLAGS_MINSIZEREL:STRING=-Os -DNDEBUG
+CMAKE_C_FLAGS_MINSIZEREL:STRING=
 
 //Flags used by the C compiler during RELEASE builds.
-CMAKE_C_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
+CMAKE_C_FLAGS_RELEASE:STRING=
 
 //Flags used by the C compiler during RELWITHDEBINFO builds.
-CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
+CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=
 
 //Libraries linked by default with all C applications.
 CMAKE_C_STANDARD_LIBRARIES:STRING=-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
@@ -175,8 +175,8 @@ CMAKE_INSTALL_SYSCONFDIR:PATH=etc
 //Path to a program.
 CMAKE_LINKER:FILEPATH=C:/msys64/ucrt64/bin/ld.exe
 
-//Program used to build from build.ninja files.
-CMAKE_MAKE_PROGRAM:FILEPATH=C:/msys64/ucrt64/bin/ninja.exe
+//No help, variable specified on the command line.
+CMAKE_MAKE_PROGRAM:UNINITIALIZED=C:/msys64/ucrt64/bin/ninja.exe
 
 //Flags used by the linker during the creation of modules during
 // all build types.
@@ -211,7 +211,10 @@ CMAKE_OBJCOPY:FILEPATH=C:/msys64/ucrt64/bin/objcopy.exe
 CMAKE_OBJDUMP:FILEPATH=C:/msys64/ucrt64/bin/objdump.exe
 
 //No help, variable specified on the command line.
-CMAKE_POLICY_VERSION_MINIMUM:UNINITIALIZED=3.5
+CMAKE_POLICY_DEFAULT_CMP0000:UNINITIALIZED=OLD
+
+//No help, variable specified on the command line.
+CMAKE_POLICY_VERSION_MINIMUM:UNINITIALIZED=3
 
 //Value Computed by CMake
 CMAKE_PROJECT_COMPAT_VERSION:STATIC=
@@ -341,6 +344,9 @@ MAJOR_VERSION:STRING=1
 //libUbertooth minor version number
 MINOR_VERSION:STRING=1
 
+//Path to a program.
+PYTHON3:FILEPATH=PYTHON3-NOTFOUND
+
 //Target directory for udev rule installation. Ensure you have
 // permissions to write to this directory.
 UDEV_RULES_PATH:STRING=/etc/udev/rules.d
@@ -353,6 +359,15 @@ libubertooth_IS_TOP_LEVEL:STATIC=OFF
 
 //Value Computed by CMake
 libubertooth_SOURCE_DIR:STATIC=C:/Users/vlads/Desktop/AN3/Licenta/ubertooth-windows-host/official-ubertooth-src/host/doc
+
+//Value Computed by CMake
+ubertooth-python_BINARY_DIR:STATIC=C:/Users/vlads/Desktop/AN3/Licenta/ubertooth-windows-host/official-ubertooth-src/host/build-windows/python
+
+//Value Computed by CMake
+ubertooth-python_IS_TOP_LEVEL:STATIC=OFF
+
+//Value Computed by CMake
+ubertooth-python_SOURCE_DIR:STATIC=C:/Users/vlads/Desktop/AN3/Licenta/ubertooth-windows-host/official-ubertooth-src/host/python
 
 //Value Computed by CMake
 ubertooth-tools_BINARY_DIR:STATIC=C:/Users/vlads/Desktop/AN3/Licenta/ubertooth-windows-host/official-ubertooth-src/host/build-windows/ubertooth-tools
@@ -572,12 +587,27 @@ CMAKE_STRIP-ADVANCED:INTERNAL=1
 CMAKE_TAPI-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//Details about finding Python3
+FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[C:/Users/vlads/anaconda3/python.exe][found components: Interpreter ][v3.13.9()]
 //ADVANCED property for variable: LIBBLUETOOTH_INCLUDE_DIR
 LIBBLUETOOTH_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: LIBBLUETOOTH_LIBRARIES
 LIBBLUETOOTH_LIBRARIES-ADVANCED:INTERNAL=1
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=C:/Program Files (x86)/ubertooth_all
+//Compiler reason failure
+_Python3_Compiler_REASON_FAILURE:INTERNAL=
+//Development reason failure
+_Python3_Development_REASON_FAILURE:INTERNAL=
+//Path to a program.
+_Python3_EXECUTABLE:INTERNAL=C:/Users/vlads/anaconda3/python.exe
+//Path to a program.
+_Python3_EXECUTABLE_DEBUG:INTERNAL=_Python3_EXECUTABLE_DEBUG-NOTFOUND
+//Python3 Properties
+_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;13;9;64;32;<none>;cp313-win_amd64;;C:\Users\vlads\anaconda3\Lib;C:\Users\vlads\anaconda3\Lib;C:\Users\vlads\anaconda3\Lib\site-packages;C:\Users\vlads\anaconda3\Lib\site-packages
+_Python3_INTERPRETER_SIGNATURE:INTERNAL=4a9b2d02a179e39841f1b90ba9424f28
+//NumPy reason failure
+_Python3_NumPy_REASON_FAILURE:INTERNAL=
 //List of C headers
 c_headers:INTERNAL=C:/Users/vlads/Desktop/AN3/Licenta/ubertooth-windows-host/official-ubertooth-src/host/libubertooth/src/ubertooth.h;C:/Users/vlads/Desktop/AN3/Licenta/ubertooth-windows-host/official-ubertooth-src/host/libubertooth/src/ubertooth_callback.h;C:/Users/vlads/Desktop/AN3/Licenta/ubertooth-windows-host/official-ubertooth-src/host/libubertooth/src/ubertooth_control.h;C:/Users/vlads/Desktop/AN3/Licenta/ubertooth-windows-host/official-ubertooth-src/host/libubertooth/src/ubertooth_fifo.h;C:/Users/vlads/Desktop/AN3/Licenta/ubertooth-windows-host/official-ubertooth-src/host/libubertooth/src/ubertooth_interface.h
 //List of C sources
