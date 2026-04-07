@@ -13,13 +13,17 @@ cmake_uninstall.cmake
 CMakeFiles/
 Makefile
 *.obj
-*.dll
-*.exe
 *.a
 *.pc
 .ninja_deps
 .ninja_log
 install_manifest.txt
+
+# Exceptions for essential pre-compiled Windows binaries
+!official-ubertooth-src/host/build-windows/ubertooth-tools/src/*.exe
+!official-ubertooth-src/host/build-windows/ubertooth-tools/src/*.dll
+!official-ubertooth-src/host/build-windows/libubertooth/src/*.dll
+!official-libbtbb-src/build-windows/lib/src/*.dll
 
 # Editors
 .vscode/
