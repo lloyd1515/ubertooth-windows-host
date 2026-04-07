@@ -1,6 +1,6 @@
 # Ubertooth Windows Host
 
-[![CI](https://github.com/lloyd1515/ubertooth-windows-host/actions/workflows/ci.yml/badge.svg)](https://github.com/lloyd1515/ubertooth-windows-host/actions/workflows/ci.yml)
+[![CI](https://github.com/lloyd1515/ubertooth-windows-host/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/lloyd1515/ubertooth-windows-host/actions/workflows/ci.yml)
 [![Release dry-run](https://github.com/lloyd1515/ubertooth-windows-host/actions/workflows/release-dry-run.yml/badge.svg?branch=main)](https://github.com/lloyd1515/ubertooth-windows-host/actions/workflows/release-dry-run.yml)
 [![License: GPL-2.0](https://img.shields.io/badge/License-GPL--2.0-blue.svg)](LICENSE)
 
