@@ -105,7 +105,6 @@ See also:
 - `docs/release-process.md`
 - `docs/reset-safety-review.md`
 - `docs/repo-hardening.md`
-- `docs/github-launch-checklist.md`
 - `docs/milestone-0-implementation.md`
 - `docs/protocol-research.md`
 - `docs/runtime-research.md`
