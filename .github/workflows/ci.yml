@@ -19,6 +19,9 @@ jobs:
         with:
           node-version: 22
 
+      - name: Setup flash tools
+        run: npm run setup-flash-tools
+
       - name: Show versions
         run: |
           node --version
