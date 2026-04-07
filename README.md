@@ -32,7 +32,7 @@ The project enforces a strict **Hardware Safety Protocol** to protect the Uberto
 
 ## Quickstart
 ```powershell
-cd C:\Users\vlads\Desktop\AN3\Licenta\ubertooth-windows-host
+cd <project-root>\ubertooth-windows-host
 npm run check
 npm run status
 npm run duty-cycle

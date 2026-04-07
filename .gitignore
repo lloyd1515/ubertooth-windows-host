@@ -5,6 +5,21 @@ dist/
 artifacts/
 coverage/
 build/
+build-windows/
+CMakeCache.txt
+build.ninja
+cmake_install.cmake
+cmake_uninstall.cmake
+CMakeFiles/
+Makefile
+*.obj
+*.dll
+*.exe
+*.a
+*.pc
+.ninja_deps
+.ninja_log
+install_manifest.txt
 
 # Editors
 .vscode/

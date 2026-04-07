@@ -5,7 +5,7 @@
 - Operator: Codex
 - Repo commit: b47c2e3
 - Windows version/build: Windows-11-10.0.26200-SP0
-- Host machine: DESKTOP-6A62CHR
+- Host machine: [REDACTED-HOST-NAME]
 
 ## Device under test
 - Device model: Ubertooth One
