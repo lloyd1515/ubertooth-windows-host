@@ -21,18 +21,58 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-
+#ifdef USE_BLUEZ
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/hci.h>
 #include <bluetooth/hci_lib.h>
 #include <sys/socket.h>
 #include <sys/ioctl.h>
+#endif
+
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
 
 #include "ubertooth.h"
+#include "win32_compat.h"
 #include "ubertooth_callback.h"
+#include <btbb.h>
+#include <getopt.h>
+
+#ifndef USE_BLUEZ
+#define ACL_LINK 0x01
+#define ACL_PTYPE_MASK 0xffff
+#define IREQ_CACHE_FLUSH 0x0001
+#define LMP_EXT_FEAT 0x80
+#define HCI_OE_USER_ENDED_CONNECTION 0x13
+struct hci_conn_info { uint16_t handle; };
+struct hci_conn_info_req { bdaddr_t bdaddr; uint8_t type; struct hci_conn_info conn_info[1]; };
+struct hci_version { uint8_t lmp_ver; uint16_t lmp_subver; uint16_t manufacturer; };
+struct hci_dev_info { uint16_t pkt_type; uint8_t features[8]; };
+static inline int hci_devid(const char *str) { return 0; }
+static inline int hci_open_dev(int dev_id) { return 0; }
+static inline int hci_devinfo(int dev_id, struct hci_dev_info *di) { return -1; }
+static inline int hci_create_connection(int sock, const bdaddr_t *ba, uint16_t ptype, uint16_t clkoffset, uint8_t role, uint16_t *handle, int timeout) { return -1; }
+static inline int hci_read_remote_name(int sock, const bdaddr_t *ba, int len, char *name, int timeout) { return -1; }
+static inline int hci_read_remote_version(int sock, uint16_t handle, struct hci_version *ver, int timeout) { return -1; }
+static inline int hci_read_remote_features(int sock, uint16_t handle, uint8_t *features, int timeout) { return -1; }
+static inline int hci_read_remote_ext_features(int sock, uint16_t handle, uint8_t page, uint8_t *max_page, uint8_t *features, int timeout) { return -1; }
+static inline int hci_read_clock_offset(int sock, uint16_t handle, uint16_t *offset, int timeout) { return -1; }
+static inline int hci_read_afh_map(int sock, uint16_t handle, uint8_t *mode, uint8_t *map, int timeout) { return -1; }
+static inline int hci_inquiry(int dev_id, int len, int max_rsp, const uint8_t *lap, inquiry_info **ii, long flags) { 
+    return win32_hci_inquiry(max_rsp, ii);
+}
+static inline int hci_disconnect(int sock, uint16_t handle, uint8_t reason, int timeout) { return -1; }
+static inline char *lmp_vertostr(uint8_t ver) { return NULL; }
+static inline char *bt_compidtostr(int compid) { return "n/a"; }
+static inline char *lmp_featurestostr(uint8_t *features, const char *prefix, int len) { return strdup(""); }
+static inline void bt_free(void *ptr) { free(ptr); }
+static inline uint16_t htobs(uint16_t n) { return n; }
+static inline uint16_t btohs(uint16_t n) { return n; }
+#define HCIGETCONNINFO 0
+static inline int ioctl(int fd, int req, ...) { return -1; }
+#endif
+
 #include <btbb.h>
 #include <getopt.h>
 

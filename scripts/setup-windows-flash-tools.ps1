@@ -6,12 +6,35 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
-$toolSourceDir = Join-Path $repoRoot 'official-ubertooth-src\host\build-windows\ubertooth-tools\src'
+$toolSourceCandidates = @(
+  Join-Path $repoRoot 'official-ubertooth-src\host\build-win-new\ubertooth-tools\src',
+  Join-Path $repoRoot 'official-ubertooth-src\host\build-windows\ubertooth-tools\src'
+)
+
+$toolSourceDir = $toolSourceCandidates[0]
+foreach ($candidate in $toolSourceCandidates) {
+  if (Test-Path -LiteralPath $candidate) {
+    $toolSourceDir = $candidate
+    break
+  }
+}
+
 $firmwarePath = Join-Path $repoRoot 'official-release\ubertooth-2020-12-R1\ubertooth-one-firmware-bin\bluetooth_rxtx.dfu'
 $resolvedStageDir = if ([System.IO.Path]::IsPathRooted($StageDir)) { $StageDir } else { Join-Path $repoRoot $StageDir }
 
 $requiredToolFiles = @(
+  'ubertooth-afh.exe',
+  'ubertooth-btle.exe',
+  'ubertooth-debug.exe',
   'ubertooth-dfu.exe',
+  'ubertooth-ducky.exe',
+  'ubertooth-dump.exe',
+  'ubertooth-ego.exe',
+  'ubertooth-follow.exe',
+  'ubertooth-rx.exe',
+  'ubertooth-scan.exe',
+  'ubertooth-specan.exe',
+  'ubertooth-tx.exe',
   'ubertooth-util.exe',
   'libusb-1.0.dll',
   'libubertooth.dll',

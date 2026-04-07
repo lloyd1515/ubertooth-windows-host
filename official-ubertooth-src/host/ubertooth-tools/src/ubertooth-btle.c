@@ -412,26 +412,4 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
-f (do_slave_mode) {
-		u16 channel;
-		if (do_adv_index == 37)
-			channel = 2402;
-		else if (do_adv_index == 38)
-			channel = 2426;
-		else
-			channel = 2480;
-		cmd_set_channel(ut->devh, channel);
 
-		// flags: LE Limited Discovery
-		uint8_t adv_data[] = { 0x02, 0x01, 0x05 };
-		cmd_le_set_adv_data(ut->devh, adv_data, sizeof(adv_data));
-
-		cmd_btle_slave(ut->devh, mac_address);
-	}
-
-	if (!(do_follow || do_no_follow || do_promisc || do_get_aa || do_set_aa ||
-				do_crc >= 0 || do_slave_mode || do_target))
-		usage();
-
-	return 0;
-}

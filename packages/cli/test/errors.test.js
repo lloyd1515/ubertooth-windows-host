@@ -38,6 +38,42 @@ test('classifyError maps capture execution failures', () => {
   assert.equal(error.code, ERROR_CODES.CAPTURE_FAILED);
 });
 
+test('classifyError maps UBT-CAP-BUSY to CAPTURE_BUSY', () => {
+  const error = classifyError(new Error('UBT-CAP-BUSY: a capture is already active.'));
+  assert.equal(error.code, ERROR_CODES.CAPTURE_BUSY);
+  assert.match(error.hint, /already running/i);
+});
+
+test('classifyError maps UBT-CAP-002 and parses last stderr', () => {
+  const error = classifyError(new Error('UBT-CAP-002: process crashed 4 times. Last exit code: 1. Last stderr: libusb error: -1'));
+  assert.equal(error.code, ERROR_CODES.CAPTURE_CRASHED);
+  assert.match(error.hint, /libusb error: -1/i);
+});
+
+test('classifyError maps UBT-CAP-001 and parses stderr', () => {
+  const error = classifyError(new Error('UBT-CAP-001: ubertooth-btle exited unexpectedly (code 1). Stderr: could not open device'));
+  assert.equal(error.code, ERROR_CODES.CAPTURE_FAILED);
+  assert.match(error.hint, /could not open device/i);
+});
+
+test('classifyError maps Bluetooth state errors to BLUETOOTH_OFF', () => {
+  const error = classifyError(new Error('Bluetooth state changed to poweredOff'));
+  assert.equal(error.code, ERROR_CODES.BLUETOOTH_OFF);
+  assert.match(error.hint, /radio is powered on/i);
+});
+
+test('classifyError maps scan command failures', () => {
+  const error = classifyError(new Error('scan command failed: internal noble error'));
+  assert.equal(error.code, ERROR_CODES.SCAN_FAILED);
+  assert.match(error.hint, /native Windows BLE scan failed/i);
+});
+
+test('classifyError maps follow command failures', () => {
+  const error = classifyError(new Error('follow command failed: device lost'));
+  assert.equal(error.code, ERROR_CODES.FOLLOW_FAILED);
+  assert.match(error.hint, /native Windows BLE connection follow failed/i);
+});
+
 test('renderCliError includes the code and hint', () => {
   const output = renderCliError(new CliError(ERROR_CODES.NO_DEVICE_FOUND, 'missing', { hint: 'plug it in' }));
   assert.match(output, /E_DEVICE_NOT_FOUND/);

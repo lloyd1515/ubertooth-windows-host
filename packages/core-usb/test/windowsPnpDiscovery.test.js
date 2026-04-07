@@ -9,7 +9,8 @@ import {
 
 test('buildDiscoveryScript targets the official Ubertooth runtime and DFU VID/PIDs', () => {
   const script = buildDiscoveryScript();
-  assert.match(script, /VID_1D50&PID_\(6002\|6003\)/);
+  assert.match(script, /PNPDeviceID LIKE 'USB\\\\VID_1D50&PID_6002%'/);
+  assert.match(script, /PNPDeviceID LIKE 'USB\\\\VID_1D50&PID_6003%'/);
   assert.match(script, /Get-CimInstance Win32_PnPEntity/);
 });
 

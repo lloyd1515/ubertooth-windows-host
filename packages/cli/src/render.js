@@ -225,3 +225,29 @@ export function renderStatusResult(entries) {
 
   return lines.join('\n');
 }
+
+export function renderDutyCycleResult(data, limitSeconds) {
+  const lines = ['Ubertooth Hardware Safety - Duty Cycle Status:'];
+  const totalSeconds = data.transmissions.reduce((sum, tx) => sum + tx.durationSeconds, 0);
+  const percent = (totalSeconds / limitSeconds) * 100;
+
+  lines.push(`   Current 1h Usage: ${totalSeconds.toFixed(2)}s / ${limitSeconds}s (${percent.toFixed(1)}%)`);
+  lines.push(`   Status: ${totalSeconds >= limitSeconds ? 'EXCEEDED (Blocked)' : totalSeconds > limitSeconds * 0.8 ? 'WARNING (Near limit)' : 'SAFE'}`);
+  
+  if (data.transmissions.length > 0) {
+    lines.push('\n   Recent Transmissions (last 1h):');
+    const sorted = [...data.transmissions].sort((a, b) => b.timestamp - a.timestamp);
+    for (const tx of sorted.slice(0, 10)) {
+      const time = new Date(tx.timestamp).toLocaleTimeString();
+      lines.push(`   - [${time}] ${tx.tool}: ${tx.durationSeconds.toFixed(2)}s`);
+    }
+    if (sorted.length > 10) {
+      lines.push(`     ... and ${sorted.length - 10} more.`);
+    }
+  } else {
+    lines.push('   No recent transmissions recorded.');
+  }
+
+  lines.push('\n   Safety Policy: To prevent thermal damage to the CC2591 RF front-end, transmissions are capped at 60s per rolling hour.');
+  return lines.join('\n');
+}

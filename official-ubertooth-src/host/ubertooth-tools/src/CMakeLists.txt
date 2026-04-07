@@ -55,11 +55,15 @@ include_directories(${LIBUSB_INCLUDE_DIR} ${LIBBTBB_INCLUDE_DIR})
 
 LIST(APPEND TOOLS_LINK_LIBS ${LIBUSB_LIBRARIES} ${LIBBTBB_LIBRARIES})
 
+if(WIN32)
+	LIST(APPEND TOOLS_LINK_LIBS bthprops)
+endif()
+
 if(USE_OWN_GNU_GETOPT)
 	LIST(APPEND TOOLS_LINK_LIBS libgetopt_static)
 endif(USE_OWN_GNU_GETOPT)
 
-LIST(APPEND TOOLS ubertooth-rx ubertooth-tx ubertooth-dump ubertooth-util ubertooth-btle ubertooth-dfu ubertooth-specan ubertooth-ego ubertooth-afh ubertooth-ducky)
+LIST(APPEND TOOLS ubertooth-rx ubertooth-tx ubertooth-dump ubertooth-util ubertooth-btle ubertooth-dfu ubertooth-specan ubertooth-ego ubertooth-afh ubertooth-ducky ubertooth-follow ubertooth-scan)
 
 if( USE_BLUEZ AND NOT ${LIBBLUETOOTH_FOUND} )
 	message( FATAL_ERROR
@@ -67,7 +71,6 @@ if( USE_BLUEZ AND NOT ${LIBBLUETOOTH_FOUND} )
 endif()
 
 if ( ${LIBBLUETOOTH_FOUND} )
-	LIST(APPEND TOOLS ubertooth-follow ubertooth-scan)
 	include_directories(${LIBBLUETOOTH_INCLUDE_DIR})
 	LIST(APPEND TOOLS_LINK_LIBS ${LIBBLUETOOTH_LIBRARIES})
 endif()

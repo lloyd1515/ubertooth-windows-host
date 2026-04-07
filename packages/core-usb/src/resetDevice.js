@@ -95,7 +95,8 @@ export async function performGuardedReset({
   timeoutMs = 10000,
   reconnectTimeoutMs = 12000,
   pollIntervalMs = 500,
-  allowNonWindows = false
+  allowNonWindows = false,
+  skipInitialSleep = false
 } = {}) {
   const preResetDevices = await probeDevices({ execFileImpl, powershellExecutable, timeoutMs, allowNonWindows });
 
@@ -126,8 +127,12 @@ export async function performGuardedReset({
   let postReset = null;
   let pollCount = 0;
 
+  // Adaptive polling: start with a small delay for reboot, then poll frequently, then back off.
+  if (!skipInitialSleep) {
+    await sleep(1000); 
+  }
+
   while ((Date.now() - startedAt) < reconnectTimeoutMs) {
-    await sleep(pollIntervalMs);
     pollCount += 1;
     const devices = await probeDevices({ execFileImpl, powershellExecutable, timeoutMs, allowNonWindows });
     const matching = devices.find((entry) => entry.pnpDeviceId === target.pnpDeviceId)
@@ -138,6 +143,11 @@ export async function performGuardedReset({
       postReset = matching;
       break;
     }
+
+    // Adaptive interval: 200ms for the first 3s, then 500ms, then 1s backoff.
+    const elapsed = Date.now() - startedAt;
+    const nextInterval = elapsed < 3000 ? 200 : (elapsed < 8000 ? 500 : 1000);
+    await sleep(nextInterval);
   }
 
   return {

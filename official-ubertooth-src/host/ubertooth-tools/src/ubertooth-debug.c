@@ -22,6 +22,7 @@
 /* formated with: indent -kr */
 
 #include "ubertooth.h"
+#include "win32_compat.h"
 #include <stdio.h>
 #include <getopt.h>
 #include <unistd.h>

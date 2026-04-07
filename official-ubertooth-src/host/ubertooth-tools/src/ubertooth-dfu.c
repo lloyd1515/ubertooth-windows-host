@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <unistd.h>  // sleep
 #include "ubertooth.h"
+#include "win32_compat.h"
 #include "dfu.h"
 
 /*

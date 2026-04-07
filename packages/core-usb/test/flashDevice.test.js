@@ -64,7 +64,8 @@ test('performOfficialFlash waits for the device to reappear after the official t
     execFileImpl,
     allowNonWindows: true,
     reconnectTimeoutMs: 1200,
-    pollIntervalMs: 10
+    pollIntervalMs: 10,
+    skipInitialSleep: true
   });
 
   assert.equal(result.successful, true);

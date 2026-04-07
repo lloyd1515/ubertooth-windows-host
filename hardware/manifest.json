@@ -1,0 +1,27 @@
+{
+  "project": "Ubertooth One Windows Host",
+  "version": "0.2.0",
+  "hardware": {
+    "name": "Ubertooth One",
+    "revision": "2014-02-R2",
+    "mcu": "LPC175x",
+    "radio": "CC2400",
+    "amplifier": "CC2591",
+    "documentation": {
+      "schematics": "official-ubertooth-src/hardware/ubertooth-one/ubertooth-one.sch",
+      "board": "official-ubertooth-src/hardware/ubertooth-one/ubertooth-one.brd",
+      "bom": "official-ubertooth-src/hardware/ubertooth-one/ubertooth-one.bom"
+    }
+  },
+  "compliance": {
+    "fcc": "Part 15",
+    "software_guards": [
+      "antenna_attached_check",
+      "duty_cycle_enforcement"
+    ]
+  },
+  "supply_chain": {
+    "trusted_source": "https://github.com/greatscottgadgets/ubertooth",
+    "firmware_binary": "official-release/ubertooth-2020-12-R1/ubertooth-one-firmware-bin/bluetooth_rxtx.dfu"
+  }
+}

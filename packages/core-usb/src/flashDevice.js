@@ -118,7 +118,8 @@ export async function performOfficialFlash({
   flashTimeoutMs = 120000,
   reconnectTimeoutMs = 30000,
   pollIntervalMs = 1000,
-  allowNonWindows = false
+  allowNonWindows = false,
+  skipInitialSleep = false
 } = {}) {
   const firmware = await validateFlashInput(firmwarePath, { statImpl });
   const preFlashDevices = await probeDevices({ execFileImpl, powershellExecutable, timeoutMs, allowNonWindows });
@@ -163,8 +164,12 @@ export async function performOfficialFlash({
   let postFlash = null;
   let pollCount = 0;
 
+  // Adaptive polling: start with a small delay for reboot, then poll frequently, then back off.
+  if (!skipInitialSleep) {
+    await sleep(1500); 
+  }
+
   while ((Date.now() - startedAt) < reconnectTimeoutMs) {
-    await sleep(pollIntervalMs);
     pollCount += 1;
     const devices = await probeDevices({ execFileImpl, powershellExecutable, timeoutMs, allowNonWindows });
     const matching = devices.find((entry) => entry.pnpDeviceId === target.pnpDeviceId)
@@ -175,6 +180,11 @@ export async function performOfficialFlash({
       postFlash = matching;
       break;
     }
+
+    // Adaptive interval: 200ms for the first 5s, then 500ms, then 1s backoff.
+    const elapsed = Date.now() - startedAt;
+    const nextInterval = elapsed < 5000 ? 200 : (elapsed < 15000 ? 500 : 1000);
+    await sleep(nextInterval);
   }
 
   return {

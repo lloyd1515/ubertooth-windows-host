@@ -4,6 +4,8 @@ export const ERROR_CODES = Object.freeze({
   NO_DEVICE_FOUND: 'E_DEVICE_NOT_FOUND',
   CAPTURE_GUARDRAIL: 'E_CAPTURE_GUARDRAIL',
   CAPTURE_TOOL_NOT_FOUND: 'E_CAPTURE_TOOL_NOT_FOUND',
+  CAPTURE_BUSY: 'E_CAPTURE_BUSY',
+  CAPTURE_CRASHED: 'E_CAPTURE_CRASHED',
   CAPTURE_FAILED: 'E_CAPTURE_FAILED',
   PNP_QUERY_FAILED: 'E_PNP_QUERY_FAILED',
   INTERFACE_DISCOVERY_FAILED: 'E_INTERFACE_DISCOVERY_FAILED',
@@ -20,6 +22,11 @@ export const ERROR_CODES = Object.freeze({
   FLASH_FAILED: 'E_FLASH_FAILED',
   FLASH_RECONNECT_TIMEOUT: 'E_FLASH_RECONNECT_TIMEOUT',
   FLASH_RECOVERY_REQUIRED: 'E_FLASH_RECOVERY_REQUIRED',
+  REPAIR_CONFIRM_REQUIRED: 'E_REPAIR_CONFIRM_REQUIRED',
+  REPAIR_FAILED: 'E_REPAIR_FAILED',
+  SCAN_FAILED: 'E_SCAN_FAILED',
+  FOLLOW_FAILED: 'E_FOLLOW_FAILED',
+  BLUETOOTH_OFF: 'E_BLUETOOTH_OFF',
   UNKNOWN: 'E_UNKNOWN'
 });
 
@@ -138,9 +145,55 @@ export function classifyError(error, context = {}) {
     });
   }
 
-  if (/Live BLE capture failed/i.test(message)) {
+  if (/UBT-CAP-BUSY/i.test(message)) {
+    return new CliError(ERROR_CODES.CAPTURE_BUSY, message, {
+      hint: 'A capture session is already running in this process. Wait for it to finish or terminate the existing session before starting a new one.',
+      cause: error
+    });
+  }
+
+  if (/UBT-CAP-002/i.test(message)) {
+    const stderrMatch = message.match(/Last stderr: (.*)$/);
+    const stderr = stderrMatch ? stderrMatch[1] : null;
+    return new CliError(ERROR_CODES.CAPTURE_CRASHED, message, {
+      hint: `ubertooth-btle crashed repeatedly.${stderr ? ` Error: ${stderr}.` : ''} Check the USB connection, try re-plugging the device, and confirm the firmware is intact with: npm run probe.`,
+      cause: error
+    });
+  }
+
+  if (/UBT-CAP-001/i.test(message) || /Live BLE capture failed/i.test(message)) {
+    const stderrMatch = message.match(/Stderr: (.*)$/);
+    const stderr = stderrMatch ? stderrMatch[1] : null;
     return new CliError(ERROR_CODES.CAPTURE_FAILED, message, {
-      hint: 'Re-run the capture with the repo-local ubertooth-btle.exe path and a known-good advertising channel (37, 38, or 39).',
+      hint: `The capture process failed.${stderr ? ` Error: ${stderr}.` : ''} Re-run with the repo-local ubertooth-btle.exe path and a known-good advertising channel (37, 38, or 39).`,
+      cause: error
+    });
+  }
+
+  if (/Bluetooth state changed to|Bluetooth state is/i.test(message)) {
+    return new CliError(ERROR_CODES.BLUETOOTH_OFF, message, {
+      hint: 'Ensure that the host Bluetooth radio is powered on and accessible in Windows Settings.',
+      cause: error
+    });
+  }
+
+  if (/scan command failed/i.test(message)) {
+    return new CliError(ERROR_CODES.SCAN_FAILED, message, {
+      hint: 'The native Windows BLE scan failed. Re-check the host Bluetooth status and driver state.',
+      cause: error
+    });
+  }
+
+  if (/follow command failed/i.test(message)) {
+    return new CliError(ERROR_CODES.FOLLOW_FAILED, message, {
+      hint: 'The native Windows BLE connection follow failed. Ensure the target device is in range and advertising.',
+      cause: error
+    });
+  }
+
+  if (/UBT-DRV-001/i.test(message)) {
+    return new CliError(ERROR_CODES.REPAIR_FAILED, message, {
+      hint: 'The automated repair command failed. Try running the command from an administrative PowerShell prompt or re-plugging the device.',
       cause: error
     });
   }

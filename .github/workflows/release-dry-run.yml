@@ -6,15 +6,18 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: read
+
 jobs:
   pack:
     runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@60edb5dd545a775178f525247ffadcbce28ef273 # v4.0.2
         with:
           node-version: 22
           cache: npm
@@ -24,3 +27,39 @@ jobs:
 
       - name: Pack CLI artifact
         run: npm pack --dry-run
+
+      - name: Upload Windows flash tools
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: windows-flash-tools
+          path: build/windows-flash-tools/
+          if-no-files-found: error
+
+  release:
+    runs-on: windows-latest
+    needs: pack
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Setup Node
+        uses: actions/setup-node@60edb5dd545a775178f525247ffadcbce28ef273 # v4.0.2
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Validate
+        run: npm run check
+
+      - name: Create Windows flash tools archive
+        run: Compress-Archive -Path build/windows-flash-tools/* -DestinationPath windows-flash-tools-${{ github.ref_name }}.zip
+        shell: pwsh
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@9d7c94cfd0a1d3ed65dd45860543468c8637ba99 # v2.0.4
+        with:
+          files: windows-flash-tools-${{ github.ref_name }}.zip
+          generate_release_notes: true

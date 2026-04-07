@@ -1,18 +1,28 @@
 # Changelog
 
-## Unreleased
+## [0.2.0] - 2026-04-07
 
 ### Added
-- guarded `flash` command that wraps the official `ubertooth-dfu` workflow
-- `.dfu` image validation, explicit `--yes` confirmation, and reconnect verification
-- flashing recovery guide for Windows users
+- **Transmission Support (TX)**: Raw symbol transmission via `ubertooth-tx`.
+- **Uberducky Support**: Rubber Ducky emulation via `ubertooth-ducky`.
+- **Hardware Safety Protocol**: 
+  - Mandatory antenna confirmation flag (`--i-confirm-antenna-is-attached`) for all TX commands.
+  - Rolling-hour duty-cycle enforcement (60s limit) to prevent CC2591 thermal damage.
+- **Guarded Flash Wrapper**: Experimental official firmware update flow via `ubertooth-dfu`.
+- **BLE Analysis Tools**: Wrappers for `ubertooth-btle` (sniffing, following, interference).
+- **Native Windows BLE Scanning**: Hardware-bridged scanning via `scan` and `follow` commands (no BlueZ required).
+- **Classic BT Discovery**: Passive discovery via `ubertooth-rx`, `ubertooth-dump`, and `ubertooth-afh`.
+- **Automated Repair**: `repair` command for WinUSB driver/binding recovery.
 
-### Safety boundary
-- no custom firmware write implementation
-- no undocumented DFU/write path exposure
-- flashing stays pinned to the official tool semantics
+### Fixed
+- Fixed flaky test cleanup on Windows for `capture-export`.
+- Corrected `ubertoothExeRunner` test expectations for JS stream output.
 
-## v0.1.0 - Safe Windows read-only baseline
+### Changed
+- Shifted from "read-only baseline" to "Guarded-Write & TX-Ready" posture.
+- Safety boundary now includes explicit hardware protection layers (Antenna + Thermal).
+
+## [0.1.0] - 2026-04-02
 
 Initial public baseline for a Windows-first Ubertooth host workflow that stays strictly in read-only territory.
 

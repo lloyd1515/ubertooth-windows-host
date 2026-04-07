@@ -6,10 +6,10 @@ import {
 import { runPowerShellJson } from './powershell.js';
 
 export function buildDiscoveryScript({ vendorId = UBERTOOTH_USB_ID.vendorId, productId = UBERTOOTH_USB_ID.productId, dfuProductId = UBERTOOTH_USB_ID.dfuProductId } = {}) {
+  const filter = `PNPDeviceID LIKE 'USB\\\\VID_${vendorId}&PID_${productId}%' OR PNPDeviceID LIKE 'USB\\\\VID_${vendorId}&PID_${dfuProductId}%'`;
   return [
     "$ErrorActionPreference = 'Stop'",
-    `$pattern = 'VID_${vendorId}&PID_(${productId}|${dfuProductId})'`,
-    "$devices = @(Get-CimInstance Win32_PnPEntity | Where-Object { $_.PNPDeviceID -match $pattern } | Select-Object Name, Manufacturer, Status, PNPDeviceID, Service, ConfigManagerErrorCode, Present)",
+    `$devices = @(Get-CimInstance Win32_PnPEntity -Filter "${filter}" | Select-Object Name, Manufacturer, Status, PNPDeviceID, Service, ConfigManagerErrorCode, Present)`,
     "if ($devices.Count -eq 0) { '[]' } else { $devices | ConvertTo-Json -Depth 4 -Compress }"
   ].join('; ');
 }

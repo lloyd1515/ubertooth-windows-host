@@ -1,0 +1,11 @@
+{
+  "name": "@ubertooth-windows-host/ble-scanner",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Windows BLE scanning and connection following via @abandonware/noble",
+  "type": "module",
+  "main": "src/bleScanner.js",
+  "dependencies": {
+    "@abandonware/noble": "^1.9.2-24"
+  }
+}

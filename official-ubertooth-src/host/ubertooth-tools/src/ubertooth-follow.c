@@ -19,16 +19,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifdef USE_BLUEZ
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/hci.h>
 #include <bluetooth/hci_lib.h>
 #include <sys/ioctl.h>
+#endif
 
 #include <unistd.h>
 #include <stdlib.h>
-#include <err.h>
-
 #include "ubertooth.h"
+#include "win32_compat.h"
 #include "ubertooth_callback.h"
 #include <btbb.h>
 #include <getopt.h>
@@ -51,6 +52,25 @@ static void usage()
 	printf("\nLAP and UAP are both required, if not given they are read from the local device, in some cases this may give the incorrect address.\n");
 //	printf("If an input file is not specified, an Ubertooth device is used for live capture.\n");
 }
+
+#ifndef USE_BLUEZ
+#define ACL_LINK 0x01
+#define ACL_PTYPE_MASK 0xffff
+#define HCI_OE_USER_ENDED_CONNECTION 0x13
+struct hci_dev_info {
+    uint16_t pkt_type;
+};
+static inline int hci_devid(const char *str) { return -1; }
+static inline int hci_open_dev(int dev_id) { return -1; }
+static inline int hci_read_bd_addr(int sock, bdaddr_t *ba, int timeout) { return -1; }
+static inline int hci_devinfo(int dev_id, struct hci_dev_info *di) { return -1; }
+static inline int hci_create_connection(int sock, const bdaddr_t *ba, uint16_t ptype, uint16_t clkoffset, uint8_t role, uint16_t *handle, int timeout) { return -1; }
+static inline int hci_read_afh_map(int sock, uint16_t handle, uint8_t *mode, uint8_t *map, int timeout) { return -1; }
+static inline int hci_read_clock(int sock, uint16_t handle, uint8_t which, uint32_t *clock, uint16_t *accuracy, int timeout) { return -1; }
+static inline int hci_read_clock_offset(int sock, uint16_t handle, uint16_t *offset, int timeout) { return -1; }
+static inline int hci_disconnect(int sock, uint16_t handle, uint8_t reason, int timeout) { return -1; }
+static inline uint16_t htobs(uint16_t n) { return n; }
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -145,7 +165,14 @@ int main(int argc, char *argv[])
 
 	if ((have_lap != 1) || (have_uap != 1)) {
 		printf("No address given, reading address from device\n");
+#ifdef USE_BLUEZ
 		hci_read_bd_addr(sock, &bdaddr, 0);
+#else
+        if (win32_get_local_bdaddr(&bdaddr) < 0) {
+            fprintf(stderr, "Error: Unable to retrieve local Bluetooth address on Windows.\n");
+            return 1;
+        }
+#endif
 		lap = bdaddr.b[0] | bdaddr.b[1] << 8 | bdaddr.b[2] << 16;
 		btbb_init_piconet(pn, lap);
 		uap = bdaddr.b[3];

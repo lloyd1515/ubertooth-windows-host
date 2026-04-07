@@ -30,7 +30,8 @@ test('performGuardedReset waits for the device to reappear', async () => {
     execFileImpl,
     allowNonWindows: true,
     reconnectTimeoutMs: 1200,
-    pollIntervalMs: 10
+    pollIntervalMs: 10,
+    skipInitialSleep: true
   });
 
   assert.equal(result.successful, true);
