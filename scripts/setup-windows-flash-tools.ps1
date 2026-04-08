@@ -6,8 +6,9 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
+$stagedToolDir = Join-Path $repoRoot 'build\windows-flash-tools'
 $toolSourceCandidates = @(
-  (Join-Path $repoRoot 'official-ubertooth-src\host\build-win-new\ubertooth-tools\src'),
+  $stagedToolDir,
   (Join-Path $repoRoot 'official-ubertooth-src\host\build-windows\ubertooth-tools\src')
 )
 
@@ -63,7 +64,9 @@ $stagedToolPaths = [ordered]@{}
 foreach ($name in $requiredToolFiles) {
   $sourcePath = Join-Path $toolSourceDir $name
   $targetPath = Join-Path $resolvedStageDir $name
-  Copy-Item -LiteralPath $sourcePath -Destination $targetPath -Force
+  if ($sourcePath -ne $targetPath) {
+    Copy-Item -LiteralPath $sourcePath -Destination $targetPath -Force
+  }
   $stagedToolPaths[$name] = $targetPath
 }
 

@@ -14,9 +14,9 @@ import {
 
 // --- findUbertoothExe ---
 
-test('findUbertoothExe returns a path containing the tool name', () => {
+test('findUbertoothExe prefers the staged flash-tools build path', () => {
   const p = findUbertoothExe('ubertooth-specan');
-  assert.match(p, /ubertooth-specan/i);
+  assert.match(p, /build[\\/]windows-flash-tools[\\/]ubertooth-specan\.exe$/i);
 });
 
 test('findUbertoothExe falls back to bare tool name when exe not found', () => {
@@ -184,3 +184,5 @@ test('runUbertoothExe passes extraArgs to spawn', async () => {
   assert.ok(capturedArgs.includes('-U'));
   assert.ok(capturedArgs.includes('0'));
 });
+
+

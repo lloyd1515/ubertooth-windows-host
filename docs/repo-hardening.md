@@ -15,6 +15,7 @@
 - Require the CI workflow before merge
 - Consider preventing force-pushes to `main`
 - Consider requiring pull requests for direct edits once collaboration begins
+- Ensure the repo-root `LICENSE` file is committed so GitHub detects the project license correctly
 
 ## Why this is still manual
 These are repository-policy choices that can affect your preferred solo workflow, so they are documented rather than forced automatically.

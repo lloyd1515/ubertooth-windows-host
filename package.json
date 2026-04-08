@@ -27,6 +27,18 @@
     "ble",
     "diagnostics"
   ],
+  "files": [
+    "README.md",
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "packages/*/src/**/*.js",
+    "packages/*/README.md",
+    "scripts/setup-windows-flash-tools.ps1",
+    "build/windows-flash-tools/**/*",
+    "official-release/ubertooth-2020-12-R1/ubertooth-one-firmware-bin/bluetooth_rxtx.dfu"
+  ],
   "scripts": {
     "capture": "node packages/cli/src/index.js capture",
     "help": "node packages/cli/src/index.js help",
@@ -41,6 +53,8 @@
     "protocol-info": "node packages/cli/src/index.js protocol --json",
     "runtime-info": "node packages/cli/src/index.js runtime --json",
     "status": "node packages/cli/src/index.js status",
+    "repair": "node packages/cli/src/index.js repair",
+    "analyze": "node packages/cli/src/index.js analyze",
     "specan": "node packages/cli/src/index.js specan",
     "rx": "node packages/cli/src/index.js rx",
     "dump": "node packages/cli/src/index.js dump",

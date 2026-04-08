@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/lloyd1515/ubertooth-windows-host/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/lloyd1515/ubertooth-windows-host/actions/workflows/ci.yml)
 [![Release dry-run](https://github.com/lloyd1515/ubertooth-windows-host/actions/workflows/release-dry-run.yml/badge.svg?branch=main)](https://github.com/lloyd1515/ubertooth-windows-host/actions/workflows/release-dry-run.yml)
-[![License: GPL-2.0](https://img.shields.io/badge/License-GPL--2.0-blue.svg)](LICENSE)
+[![License: GPL-2.0-or-later](https://img.shields.io/badge/License-GPL--2.0--or--later-blue.svg)](LICENSE)
 
 Windows-first host tooling scaffold for Ubertooth, aimed at safe public use and phased progress toward Linux feature parity.
 
@@ -108,3 +108,4 @@ See also:
 - `docs/milestone-0-implementation.md`
 - `docs/protocol-research.md`
 - `docs/runtime-research.md`
+

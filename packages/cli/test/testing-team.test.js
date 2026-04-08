@@ -206,3 +206,44 @@ test('Testing Team: Tool Parity and Flag Mapping', () => {
   assert.ok(helpOutput.includes('--slave'), 'btle should support --slave');
   assert.ok(helpOutput.includes('--pcapng'), 'btle should support --pcapng');
 });
+
+
+test('Testing Team: package scripts expose documented repair and analyze commands', () => {
+  const packageJson = JSON.parse(readFileSync(path.join(ROOT_DIR, 'package.json'), 'utf8'));
+
+  assert.equal(packageJson.scripts.repair, 'node packages/cli/src/index.js repair');
+  assert.equal(packageJson.scripts.analyze, 'node packages/cli/src/index.js analyze');
+});
+
+
+test('Testing Team: package dry-run ships staged flash tools without duplicate upstream binaries', () => {
+  const result = process.platform === 'win32'
+    ? spawnSync(process.env.ComSpec || 'cmd.exe', ['/d', '/s', '/c', 'npm pack --json --dry-run --ignore-scripts'], {
+        cwd: ROOT_DIR,
+        encoding: 'utf8'
+      })
+    : spawnSync('npm', ['pack', '--json', '--dry-run', '--ignore-scripts'], {
+        cwd: ROOT_DIR,
+        encoding: 'utf8'
+      });
+
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  const packResult = JSON.parse(result.stdout);
+  const packedPaths = new Set(packResult[0].files.map(file => file.path));
+
+  assert.ok(packedPaths.has('LICENSE'));
+  assert.ok(packedPaths.has('build/windows-flash-tools/ubertooth-dfu.exe'));
+  assert.ok(!Array.from(packedPaths).some(file => file.startsWith('official-ubertooth-src/host/build-windows/ubertooth-tools/src/')));
+  assert.ok(!packedPaths.has('official-ubertooth-src/README.md'));
+  assert.ok(!packedPaths.has('official-ubertooth-src/host/README.md'));
+});
+
+
+test('Testing Team: repo-root GPL license file is present and package metadata stays aligned', () => {
+  const packageJson = JSON.parse(readFileSync(path.join(ROOT_DIR, 'package.json'), 'utf8'));
+  const licenseText = readFileSync(path.join(ROOT_DIR, 'LICENSE'), 'utf8');
+
+  assert.equal(packageJson.license, 'GPL-2.0-or-later');
+  assert.match(licenseText, /GNU GENERAL PUBLIC LICENSE/i);
+  assert.match(licenseText, /Version 2, June 1991/i);
+});

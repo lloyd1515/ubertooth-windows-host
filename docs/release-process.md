@@ -12,6 +12,7 @@ This repo has an **experimental guarded flash wrapper**. Native Windows proof-bu
 6. Confirm README and install/flashing docs still match reality
 7. Confirm safety boundary text still limits write behavior to the guarded official flow
 8. Confirm no undocumented control-out/write code slipped in
+9. Confirm the repo-root `LICENSE` file is committed and `gh repo view --json licenseInfo` reports the expected GPL license
 
 ## Tagging
 Use semantic-ish tags for milestones, e.g.:
