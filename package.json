@@ -4,7 +4,7 @@
   "private": true,
   "description": "Windows-first safe Ubertooth host CLI for diagnostics, official getter-only protocol access, a guarded reset path, an experimental guarded official flash wrapper, and a safer repo-local Windows setup helper.",
   "type": "module",
-  "license": "GPL-2.0-or-later",
+  "license": "GPL-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/lloyd1515/ubertooth-windows-host.git"

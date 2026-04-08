@@ -243,7 +243,7 @@ test('Testing Team: repo-root GPL license file is present and package metadata s
   const packageJson = JSON.parse(readFileSync(path.join(ROOT_DIR, 'package.json'), 'utf8'));
   const licenseText = readFileSync(path.join(ROOT_DIR, 'LICENSE'), 'utf8');
 
-  assert.equal(packageJson.license, 'GPL-2.0-or-later');
+  assert.equal(packageJson.license, 'GPL-2.0');
   assert.match(licenseText, /GNU GENERAL PUBLIC LICENSE/i);
   assert.match(licenseText, /Version 2, June 1991/i);
 });
